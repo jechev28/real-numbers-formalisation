@@ -1,0 +1,38 @@
+\begin{thebibliography}{1}
+
+\bibitem{Bishop}
+E.~Bishop.
+\newblock {\em Foundations of constructive analysis}.
+\newblock McGraw-Hill, New York, 1967.
+
+\bibitem{bishop1985constructive}
+Errett Bishop and Douglas Bridges.
+\newblock {\em Constructive analysis}, volume 279.
+\newblock Springer Science \& Business Media, 1985.
+
+\bibitem{bridges1999constructive}
+Douglas~S Bridges.
+\newblock Constructive mathematics: a foundation for computable analysis.
+\newblock {\em Theoretical computer science}, 219(1):95--109, 1999.
+
+\bibitem{Bridger}
+M.~Briger.
+\newblock {\em Real analysis a constructive approach}.
+\newblock Wiley Interscience, 2007.
+
+\bibitem{ciaffaglione2002tour}
+Alberto Ciaffaglione and Pietro Di~Gianantonio.
+\newblock A tour with constructive real numbers.
+\newblock In {\em Types for Proofs and Programs}, pages 41--52. Springer, 2002.
+
+\bibitem{palmgren2002intuitionistic}
+Erik Palmgren.
+\newblock An intuitionistic axiomatisation of real closed fields.
+\newblock {\em Mathematical Logic Quarterly}, 48(2):297--300, 2002.
+
+\bibitem{troelstra1988constructivism}
+AS~Troelstra and D~van Dalen.
+\newblock {\em Constructivism in Mathematics}, volume~1.
+\newblock Elsevier, 1988.
+
+\end{thebibliography}

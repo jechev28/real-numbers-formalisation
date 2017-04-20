@@ -1,0 +1,16 @@
+-- Agda version 2.4.3.1
+
+module BoundedEmptySet where
+open import RAxioms
+open import RLogic
+
+-- Bounded empty set (Bes)
+
+aux : {x : ℝ} → x ≡ x → ¬ (x ≡ x ) → ⊥
+aux h₁ h₂ = h₂ h₁
+
+T : ℝ → Set
+T x = ¬ (x ≡ x)
+
+Bes : Bound T
+Bes = exist r₁ (λ x Tx → ⊥-elim (aux (refl x) Tx))

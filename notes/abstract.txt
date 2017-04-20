@@ -1,0 +1,3 @@
+The introduction of the real numbers can be done in different ways. In
+this talk, from an axiomatic construction, we formalize the real
+numbers and some of their properties in the proof assistant Agda.

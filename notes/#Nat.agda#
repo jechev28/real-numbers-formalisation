@@ -1,0 +1,7 @@
+-- Tested with Agda version 2.4.3.1.
+
+module Nat where
+
+data Nat : Set where
+  zero : Nat
+  succ : Nat → Nat

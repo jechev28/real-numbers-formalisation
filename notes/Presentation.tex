@@ -1,0 +1,279 @@
+\documentclass{beamer}
+\usepackage{ragged2e}
+\title{Formalization of the Real Numbers}
+\author{{{ \rm { \rm (Work in Progress)} \\ {Jorge O. Acevedo-Acosta and Jose Luis Echeverri-Jurado}}}  \\
+\;\;\;\;\; {{ \rm Eafit University}}}
+\date{{{ \rm Logic and Computation Seminar}} \\ {{ \rm EAFIT University}} \\ {{ \rm 28 de Julio 2015}}}
+\usepackage{xcolor}
+\xdefinecolor{lavanda}{rgb}{0.8,0.6,1}
+\xdefinecolor{oliva}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{minaranja}{rgb}{0.94,0.48,0.2}
+\usetheme{Warsaw}
+\usecolortheme[named=oliva]{structure}
+\usepackage{amssymb}
+%\usepackage{math}
+%\usetheme{Warsaw}
+%Preambulo
+\begin{document}
+\justifying
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Real Numbers} \framesubtitle{Introduction}
+ { \rm The
+  formalization of real numbers can be performed forms different, but
+  we will continue this work in the axiomatic. First talk about Agda
+  as a main tool to develop this work and secondly the axiomatization
+  of the real numbers, drawing a parallel between writing as is done
+  in classical mathematics and the code used in Agda.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda} \framesubtitle{What is agda?}
+{ \rm ``A dependently
+  typed programming language and proof assistant. Agda is a functional
+  programming language with dependent types. It is an extension of
+  Martin-L\"of’s intuitionistic type theory.'' \footnote{{{ \tiny \rm Ana
+      Bove, Peter Dybjer, and Ulf Norell. A Brief Overview of Agda –
+A Functional Language with Dependent Types. pp. 1}}} Agda It has infix,
+mixfix operators, Unicode characters, and an interactive Emacs
+interface.\\}\;\;\;\;
+
+{ \rm ``Agda is based on intuitionistic type theory.''\footnote{{{ \tiny \rm
+      Ulf Norell and James Chapman. Dependently Typed Programming in
+      Agda. pp. 1-2}}} A great contribution from the constructive
+  mathematics by mathematical Per Martin-L\"of. Agda has many
+  similarities with other proof assistants based on dependent types,
+  such as Coq and others.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda} \framesubtitle{Developers agda}
+{ \rm ``Agda is
+  open-source and enjoys contributions from many authors. The center
+  of the Agda development is the Programming Logic group at Chalmers
+  and Gothenburg University; the main developers are Ulf Norell, Nils
+  Anders Danielsson, and Andreas Abel.'' \footnote{{{ \tiny \rm Agda wiki
+      page. http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.Documentation
+}}}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda} \framesubtitle{Datatypes and pattern matching}
+{ \rm Datatypes are introduced by a \fcolorbox{orange}{orange}{ \color{white} data} declaration, giving the name and type of the datatype as well as the constructors and their types. \\\
+
+data Bool : Set where\footnote{{{ \tiny \rm
+      Ana Bove and Peter Dybjer. Dependent Types at Work. pp. 5}}} \\
+
+~~~true  : Bool \\
+~~~false : Bool \\\
+
+The type of Bool is \fcolorbox{orange}{orange}{ \color{white} Set} \\
+
+Functions over Bool can be defined by pattern matching \\\
+
+$not : Bool \to Bool$ \\
+
+not true  = false \\
+not false = true} \\
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda}
+\framesubtitle{Datatypes and pattern matching}
+{ \rm Another example where we use datatypes is a definition of equality, then use it in the equational reasoning \\\
+
+$data\; \_\equiv\_ :\ \mathbb{R} \to \mathbb{R} \to Set\; where$ \\
+$~~~refl :\ \{x : \mathbb{R} \} \to x \equiv x$\footnote{{{ \tiny \rm
+      Ana Bove and Peter Dybjer. Dependent Types at Work. pp. 23}}} \\\
+
+$subst\; :\; (P\; :\;\mathbb{R}\; \to\; Set) \to \; \{x\; y\; :\; \mathbb{R}\} \to x \equiv y \to P\; x \to P\; y$\footnote{{{ \tiny \rm
+      Ana Bove and Peter Dybjer. Dependent Types at Work. pp. 23}}}\\
+
+$subst\; P\; refl\; Px\; =\; Px$
+}
+\end{frame}
+\begin{frame}
+\frametitle{Agda}
+\framesubtitle{Reasoning Equational}
+$\_ \equiv \langle\_\rangle\_ :\ \forall\ x\; \{y\ z\} \to x \equiv y \to y \equiv z \to x \equiv z$ \\
+
+$\_\; \equiv\langle x\equiv y \rangle\;\; y\equiv z\; =\;\; \equiv-trans\; x\equiv y\;\; y\equiv z$\\\
+
+$\_\centerdot\; :\; \forall\; x \to x\; \equiv\; x$\\
+$\_\centerdot\; \_ = refl$
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda} \framesubtitle{Logic} { \rm In Agda, we can define
+  infix and mix-fix operators. One indicates the places of the
+  arguments of the operators with underscore ``\_ `` For example,
+  disjunction on truth values is usually an infix operator and it can
+  be declared in Agda as follows: \\\
+
+$\_ or \_ : Bool \to Bool \to Bool$\\
+$true\; or\; \_\; =\; true$ \\
+$\_ \;or\; true\; =\; true$ \\
+$\_\; or\; \_\;\;\;\;\;\;=\; false$\footnote{{{ \tiny \rm
+      Ana Bove and Peter Dybjer. Dependent Types at Work. pp. 6}}} \\\
+
+$\neg\_\; :\; Set\; \to\; Set$\\
+$\neg\; A\; =\; A\; \to\; \perp$\footnote{{{ \tiny \rm
+      Ana Bove and Peter Dybjer. Dependent Types at Work. pp. 20}}}
+
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda}
+\framesubtitle{infix Inductive}
+{ \rm We can define the precedence and association of infix operators.\\\
+
+$infixl$ $60 \; \_ or \_$ \\
+$infixr$ $2 \; \_ \wedge \_$}\\\
+
+$data \; \_ \wedge \_ \; (A \; B : Set) : Set \; where$\\
+$\;\;$ $ \_,\_ : A \to B \to A \wedge B$
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda}
+\framesubtitle{Natural numbers}
+{ \rm Another useful datatype is the type of (unary) natural numbers. \\\
+
+data $Nat$ : Set where \\
+$zero : Nat$\\
+$succ  : Nat \to Nat$\\\
+
+Addition on natural numbers can be defined as a recursive function. \\\
+
+$+ : Nat \to Nat \to Nat$ \\
+$zero  + m = m$ \\
+$succ n + m = succ (n + m)$ \\
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Agda}
+\framesubtitle{Natural numbers}
+{ \rm Definition of multiplication \\
+$* : Nat \to Nat \to Nat$\\
+$zero  * m = zero$\\
+$succ n * m = (m + n) * m$\\
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Axiomatic of the Real numbers}
+\framesubtitle{Real numbers}
+
+{ \rm "To Hilbertthe demonstration is a chain of affirmations,
+built following strict rules ensures that the statement is deduced
+from the axioms employees"~\ (Quoted by Oostra, A., 1999).}\\\
+
+{ \rm The axiomatic presentation of Real numbers originally made
+Hilbert identifies four groups of axioms: axioms connection,
+calculation, ordination and completeness.}\\\
+
+{ \rm In some modern texts Mathematical~\cite{Rosenlicht} Analysis an axiomatic presentation of Real
+numbers is done, which consists of a non-defined terms not susceptible
+primitive concepts of definition and a set of axioms that we accept as
+true, this is what constitutes the starting point a mathematical
+theory. Cadential manner of starting to testing a series of
+properties, theorems from the axioms and/or other properties
+previously demonstrated.
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Axiomatization of Real numbers}
+\framesubtitle{Real numbers}
+
+{ \rm The system of Real numbers as the set $\Re$ is defined with two
+basic operations called:\\\
+}
+Addition\\\
+$\_ +\_ : ~\Re ~\to ~\Re ~\to ~\Re$\\\
+
+Multiplication\\\
+$\_*\_ : ~\Re ~\to ~\Re ~\to ~\Re$\\\
+
+And order relation called ``greather than'':\\\
+
+$\_>\_ : ~\Re ~\to ~\Re \to ~Set$\\\
+
+{ \rm Besides complying axioms, pose some
+definitions and then the properties are checked (theorems).
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Axiomatization of Real numbers}
+\framesubtitle{Real numbers}
+{ \rm The axioms are classified into three groups: field axioms, axioms of
+order and completeness axiom ~\cite{Rosenlicht}. In the constructivist math
+~\cite{Bridges1999} an axiom more is entered. the Archimedean property which
+will be discussed later.
+\\
+Field axioms are those that satisfy the defined operations
+plus (+) and multiplication (*).\\\
+}
+Addition axioms.
+\\
+\begin{align*}
+  +-comm : (x\ y : \Re)    & \to ~ x + y ~\equiv\ y + x\\
+  +-asso : (x\ y\ z : \Re) & \to x + y + z ~\equiv\ x + (y + z)\\
+  +-neut : (x : \Re)       & \to    x + r_{0} ~\equiv\ x\\
+  +-inve : (x : \Re)       & \to x + (- x) ~\equiv\ r_{0}
+\end{align*}
+\\
+Where:
+\\
+$-\_  : \Re ~\to ~\Re$
+\\
+$\_ ^{-1} : \Re ~\to ~\Re$
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Axiomatization of Real numbers}
+\framesubtitle{Real numbers}
+
+Multiplication axioms.\\\
+
+\begin{align*}
+  *-comm : (x\ y : \Re)    & ~\to\ x * y\          \equiv\ y * x\\
+  *-asso : (x\ y\ z : \Re) & ~\to\ x * y * z\      \equiv\ x * (y * z)\\
+  *-neut : (x : \Re)       & ~\to\ x * r_{1}\       \equiv x\\
+  *-inve : (x : \Re)       & ~\to\ ~\lnot\ (x~\equiv\ r_{0})~\to\ x * (x^{-1})\ \equiv\ r_{1}\\\
+\end{align*}
+
+Distributivity axiom.\\\
+
+  *-dist : $(x\ y\ z : \Re) ~\to\ x * (y + z) ~\equiv\ x * y + x * z$
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Axiomatization of Real numbers}
+\framesubtitle{Real numbers}
+{ \rm The axioms of order are those that satisfy the relationship of order $(>)$\\\
+}
+Order axioms.\\\
+\begin{align*}
+  >-asym     : \lbrace x\ y    : \Re \rbrace &\to\ x > y ~\to\ \lnot\ (y > x)\\
+  >-trans    : \lbrace x\ y\ z : \Re \rbrace &\to\ x > y ~\to\ y > z ~\to\ x > z\\
+  >-+-cong-l : \lbrace x\ y\ z : \Re \rbrace & \to\ x > y ~\to\ z + x > z + y\\
+  >-*-cong-l : \lbrace x\ y\ z : \Re \rbrace & \to\ z > r_0 ~\to\ x > y ~\to\ z * x > z * y\\
+  trichotomy : (x\ y : \Re) & \to\ (x > y) ~\lor\ (x ~\equiv\ y) ~\lor\ (x < y)
+\end{align*}
+
+\end{frame}
+
+\bibliographystyle{plain}
+\bibliography{Database}
+
+\end{document}

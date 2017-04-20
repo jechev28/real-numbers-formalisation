@@ -1,0 +1,4 @@
+name: thesis
+include:
+  src/
+  notes/
