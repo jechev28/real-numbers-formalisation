@@ -26,9 +26,7 @@ postulate
 -- Pending to prove.
 postulate
   dis-des : (x y z w : ℝ) → dist (x + z) (y + w) ≤ dist x y + dist z w
-  dis-produc : (x y z w : ℝ) → dist (x * z) (y * w) ≡ dist x y * dist z w
   trans-<-+ : {x y z w : ℝ} → x < y → z < w → x + z < y + w
-  trans-<-* : {x y z w : ℝ} → x ≥ r₀ → y > r₀ → z ≥ r₀ → w > r₀ → x < y → z < w → x * z < y * w
 
 -- Previous properties.
 
