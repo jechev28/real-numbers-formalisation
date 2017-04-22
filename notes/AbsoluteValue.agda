@@ -26,12 +26,3 @@ abs-0 : abs r₀ ≡ r₀
 abs-0 with case-abs r₀
 abs-0 | inj₁ 0<0 = ⊥-elim (<-irrefl 0<0)
 abs-0 | inj₂ h = refl r₀
-
--- Distance (or metric) between two points.
--- Mathematical Analysis. Apostol, Tom. M. 1974. Pag. 60.
-
--- dist : ℝ → ℝ → ℝ
--- dist x y = abs (x - y)
-
--- d-refl : (x y : ℝ)   → (dist x y ≡ r₀) → (x ≡ y)
--- d-refl x y h = {!!}
