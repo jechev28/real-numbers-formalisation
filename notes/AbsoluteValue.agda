@@ -22,7 +22,19 @@ abs x with case-abs x
 ... | inj₁ _ = - x
 ... | inj₂ _ = x
 
+-- Properties of the absolute value.
+
 abs-0 : abs r₀ ≡ r₀
 abs-0 with case-abs r₀
 abs-0 | inj₁ 0<0 = ⊥-elim (<-irrefl 0<0)
 abs-0 | inj₂ h = refl r₀
+
+x>0→absx=x : (x : ℝ) → x > r₀ → abs x ≡ x
+x>0→absx=x x x>0 with case-abs x
+... | inj₁ p = ⊥-elim (≥→≮ (inj₁ x>0) p)
+... | inj₂ p = refl x
+
+x<0→absx=-x : (x : ℝ) → x < r₀ → abs x ≡ - x
+x<0→absx=-x x x<0 with case-abs x
+... | inj₁ p = refl (- x)
+... | inj₂ p = ⊥-elim (≥→≮ p x<0)
