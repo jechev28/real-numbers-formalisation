@@ -10,6 +10,40 @@ open import Properties
 
 -- Previous properties.
 
+x-y<0→x<y : {x y : ℝ} → x - y < r₀ → x < y
+x-y<0→x<y {x} {y} h = p₁-helper (p₂-helper (>-to-< (>-+-right h)) )
+
+  where
+   p₁-helper : x + r₀ < y → x < y
+   p₁-helper h₁ = subst₂ (λ t₁ t₂ → t₁ > t₂) (refl y) (+-neut x) h₁
+
+   p₂-helper : x - y + y < r₀ + y → x + r₀ < y
+   p₂-helper h₂ = subst₂ (λ t₁ t₂ → t₁ > t₂) p₂₁-helper p₂₂-helper h₂
+
+    where
+     p₂₁-helper : r₀ + y ≡ y
+     p₂₁-helper =
+        r₀ + y ≡⟨ +-comm r₀ y ⟩
+        y + r₀ ≡⟨ +-neut y ⟩
+        y      ∎
+
+     p₂₂-helper : x - y + y ≡ x + r₀
+     p₂₂-helper =
+        x - y + y     ≡⟨ +-asso x (- y) y ⟩
+        x + (- y + y) ≡⟨ subst (λ w → x + (- y + y) ≡ x + w) (+-comm (- y) y) (refl (x + (- y + y))) ⟩
+        x + (y - y)   ≡⟨ subst (λ w → x + (y - y) ≡ x + w) (+-inve y) (refl (x + (y - y))) ⟩
+        x + r₀       ∎
+
+≤→≯  : {x y : ℝ} → x ≤ y → x ≯ y
+≤→≯ {x} {y} x≤y x>y = case prf1 prf2 x≤y
+
+  where
+    prf1 : x < y → ⊥
+    prf1 x<y = <-asym x<y (>-to-< x>y)
+
+    prf2 : x ≡ y → ⊥
+    prf2 x≡y = >→≢ x>y x≡y
+
 -x=0→x=0 : (x : ℝ) → - x ≡ r₀ → x ≡ r₀
 -x=0→x=0 x -x=0 = ≡-*-cancel-r (<→≢(x>0→-x<0 1>0)) p-helper
 
