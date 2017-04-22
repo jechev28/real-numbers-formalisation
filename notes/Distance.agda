@@ -57,3 +57,8 @@ d-refl x y = d-refl-r , d-refl-l
      abs (x - x) ≡⟨ subst (λ w → abs (x - x) ≡ abs w) (+-inve x) (refl (abs (x - x))) ⟩
      abs r₀      ≡⟨ abs-0 ⟩
      r₀      ∎
+
+d-pos : (x y : ℝ) → dist x y ≥ r₀
+d-pos x y with case-abs (x - y)
+... | inj₁ p = inj₁ (x<0→-x>0 (>-to-< p))
+... | inj₂ p = p
