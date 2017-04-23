@@ -1,5 +1,3 @@
--- Agda version 2.4.3.1
-
 module PoReasoning where
 open import Axioms
 open import PoProperties
