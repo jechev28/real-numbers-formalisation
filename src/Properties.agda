@@ -513,6 +513,28 @@ mul-x-y {x} {y} =
 <-<-+ : {x y z w : ℝ} → x < y → z < w → x + z < y + w
 <-<-+ {x} {y} {z} {w} x<y z<w = <-trans (<-+-right x<y) (<-+-left z<w)
 
+x≥-y→-x≤y : (x y : ℝ) → x ≥ - y → - x ≤ y
+x≥-y→-x≤y x y x≥-y = case prf1 prf2 x≥-y
+
+  where
+   prf1 : x > - y → - x < y ∨ - x ≡ y
+   prf1 x>-y = inj₁ (minus-to-< (p₁-helper (<-+-left x>-y)))
+
+    where
+     p₁-helper : y + x > y - y → y - - x > r₀
+     p₁-helper h = subst₂ (λ t₁ t₂ → t₁ > t₂) (subst (λ w → y + x ≡ y + w)
+                                                      (≡-sym mul--x) (refl (y + x))) (+-inve y) h
+
+   prf2 : x ≡ - y → - x < y ∨ - x ≡ y
+   prf2 x=-y = inj₂ p₁-helper
+
+    where
+     p₁-helper : - x ≡ y
+     p₁-helper =
+       - x     ≡⟨ subst (λ w → - x ≡ - w) x=-y (refl (- x)) ⟩
+       - (- y) ≡⟨ mul--x ⟩
+       y       ∎
+
 ≤-<-trans : {x y z : ℝ} → x ≤ y → y < z → x < z
 ≤-<-trans {x} {y} {z} x≤y y<z = case prf1 prf2 x≤y
 
