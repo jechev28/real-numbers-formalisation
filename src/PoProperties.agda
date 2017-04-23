@@ -6,9 +6,6 @@ open import EqProperties
 open import Logic
 open import Properties
 
->-≡→>-2 : {x y z : ℝ} → x > y → y ≡ z → x > z
->-≡→>-2 x>y (refl x) = x>y
-
 ≥-refl : {x : ℝ} → x ≥ x
 ≥-refl {x} = inj₂ (refl x)
 
