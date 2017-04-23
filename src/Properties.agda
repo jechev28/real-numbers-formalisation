@@ -48,6 +48,16 @@ open import Nat
    p₂-helper : x ≡ y → y > x ∨ y ≡ x
    p₂-helper x≡y = inj₂ (≡-sym x≡y)
 
+≥-to-≤ : {x y : ℝ} → x ≥ y → y ≤ x
+≥-to-≤ {x} {y} x≥y = case p₁-helper p₂-helper x≥y
+
+  where
+   p₁-helper : x > y → y < x ∨ y ≡ x
+   p₁-helper x>y = inj₁ (>-to-< x>y)
+
+   p₂-helper : x ≡ y → y < x ∨ y ≡ x
+   p₂-helper x≡y = inj₂ (≡-sym x≡y)
+
 ≡-+-cancel-r : {x y z : ℝ} → x + z ≡ y + z → x ≡ y
 ≡-+-cancel-r {x} {y} {z} h =
   x               ≡⟨ ≡-sym (+-neut x) ⟩
