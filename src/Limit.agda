@@ -1,6 +1,8 @@
 module Limit where
 
+open import AbsoluteValue
 open import Axioms
+open import Distance
 open import EqReasoning
 open import EqProperties
 open import Exp
@@ -9,23 +11,10 @@ open import Min
 open import Nat
 open import Properties
 
--- Distance (or metric) between two points.
--- Mathematical Analysis. Apostol, Tom. M. 1974. Pag. 60.
-
--- Function distance between two points.
-postulate
-  dist : ℝ → ℝ → ℝ
-
--- Properties of the dist function.
-postulate
-  d-pos  : (x y : ℝ) → dist x y ≥ r₀
-  d-sym  : (x y : ℝ) → dist x y ≡ dist y x
-  d-refl : (x y : ℝ) → (dist x y ≡ r₀) ↔ (x ≡ y)
-  d-tri  : (x y z : ℝ) → dist x y ≤ dist x z + dist z y
-
 -- Pending to prove.
 postulate
   dis-des : (x y z w : ℝ) → dist (x + z) (y + w) ≤ dist x y + dist z w
+  d-tri  : (x y z : ℝ) → dist x y ≤ dist x z + dist z y
 
 -- Previous properties.
 
