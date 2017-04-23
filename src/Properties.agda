@@ -489,6 +489,9 @@ mul-x-y {x} {y} =
 <-+-right : {x y z : ℝ} → x < y → x + z < y + z
 <-+-right {x} {y} {z} x<y = >-to-< (>-+-right (<-to-> x<y))
 
+<-<-+ : {x y z w : ℝ} → x < y → z < w → x + z < y + w
+<-<-+ {x} {y} {z} {w} x<y z<w = <-trans (<-+-right x<y) (<-+-left z<w)
+
 ≤-<-trans : {x y z : ℝ} → x ≤ y → y < z → x < z
 ≤-<-trans {x} {y} {z} x≤y y<z = case prf1 prf2 x≤y
 
