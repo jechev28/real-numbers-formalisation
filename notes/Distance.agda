@@ -33,6 +33,19 @@ x-y<0→x<y {x} {y} h = p₁-helper (p₂-helper (>-to-< (>-+-right h)) )
         x + (- y + y) ≡⟨ subst (λ w → x + (- y + y) ≡ x + w) (+-comm (- y) y) (refl (x + (- y + y))) ⟩
         x + (y - y)   ≡⟨ subst (λ w → x + (y - y) ≡ x + w) (+-inve y) (refl (x + (y - y))) ⟩
         x + r₀       ∎
+-x<0→x>0 : (x : ℝ) → - x < r₀ → x > r₀
+-x<0→x>0 x -x<0 = <-to-> (x-y<0→x<y p₁-helper)
+
+  where
+   p₁-helper : r₀ - x < r₀
+   p₁-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) p₂-helper (refl r₀) -x<0
+
+    where
+     p₂-helper : - x ≡ r₀ - x
+     p₂-helper =
+        - x      ≡⟨ ≡-sym (+-neut (- x)) ⟩
+        - x + r₀ ≡⟨ +-comm (- x) r₀ ⟩
+        r₀ - x   ∎
 
 ≤→≯  : {x y : ℝ} → x ≤ y → x ≯ y
 ≤→≯ {x} {y} x≤y x>y = case prf1 prf2 x≤y
