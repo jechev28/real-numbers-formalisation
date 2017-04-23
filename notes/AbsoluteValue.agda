@@ -62,3 +62,43 @@ abs-minus x with case-abs (- x)
      r₀        ≡⟨ ≡-sym abs-0 ⟩
      abs r₀    ≡⟨ subst ((λ w → abs r₀ ≡ abs w)) (≡-sym (-x=0→x=0 x -x=0)) (refl (abs r₀)) ⟩
      abs x     ∎
+
+abs≥x : (x : ℝ) → abs x ≥ x
+abs≥x x with case-abs x
+... | inj₁ p = inj₁ (>-+-cancel-r  (p₁-helper (>-*-cancel-l (>-inve-r₀ (>-trans 2>1 1>0)) (p₂-helper (p₃-helper p))) ))
+
+  where
+   p₁-helper : r₀ > (ℕ2ℝ 2 * x) → - x + x > x + x
+   p₁-helper 0>2 = subst₂ (λ t₁ t₂ → t₁ > t₂) (≡-sym p₁₁-helper) 2x=x+x 0>2
+
+    where
+     p₁₁-helper : - x + x ≡ r₀
+     p₁₁-helper =
+         - x + x ≡⟨ +-comm (- x) x ⟩
+          x - x  ≡⟨ +-inve x ⟩
+          r₀     ∎
+
+   p₂-helper : r₀ > (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x → ℕ2ℝ 2 ⁻¹ * r₀ > ℕ2ℝ 2 ⁻¹ * (ℕ2ℝ 2 * x)
+   p₂-helper h = subst₂ (λ t₁ t₂ → t₁ > t₂) (≡-sym p₂₂-helper) (*-asso (ℕ2ℝ 2 ⁻¹) (ℕ2ℝ 2) x) h
+
+     where
+      p₂₂-helper : ℕ2ℝ 2 ⁻¹ * r₀ ≡ r₀
+      p₂₂-helper =
+          ℕ2ℝ 2 ⁻¹ * r₀ ≡⟨ *-comm (ℕ2ℝ 2 ⁻¹) r₀ ⟩
+          r₀ * ℕ2ℝ 2 ⁻¹ ≡⟨ *-left-zero ⟩
+          r₀             ∎
+   p₃-helper : r₀ > x → r₀ > (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x
+   p₃-helper 0>x = subst₂ (λ t₁ t₂ → t₁ > t₂) (refl r₀) (≡-sym p₃₃-helper) 0>x
+
+     where
+      p₃₃-helper : ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 * x ≡ x
+      p₃₃-helper =
+          (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x ≡⟨ subst (λ w → (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x ≡ w * x) (*-comm (ℕ2ℝ 2 ⁻¹)
+                                            (ℕ2ℝ 2)) (refl ((ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x)) ⟩
+          (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x ≡⟨ subst (λ w → (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x ≡ w * x) (*-inve (ℕ2ℝ 2) 2≢0)
+                                            (refl ((ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x)) ⟩
+          r₁ * x ≡⟨ *-comm r₁ x ⟩
+          x * r₁ ≡⟨ *-neut x ⟩
+          x             ∎
+
+... | inj₂ p = inj₂ (refl x)
