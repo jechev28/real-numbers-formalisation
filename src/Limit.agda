@@ -106,10 +106,10 @@ cte-lim a L k f ε ε>0 = exist ε p-helper
         a₃-helaer h4 = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ + dist (f₂ x) L₂)) (1/2x+1/2x=x ε) h4
 
         arf1 : δ₁ ≤ δ₂ → δ₁ > r₀
-        arf1 h5 = >-≡→> δ>0 (≡-trans (refl (min δ₁ δ₂)) (minxy-l δ₁ δ₂ h5))
+        arf1 h5 = >-≡→>-1 δ>0 (≡-trans (refl (min δ₁ δ₂)) (minxy-l δ₁ δ₂ h5))
 
         arf2 : δ₂ ≤ δ₁ → δ₁ > r₀
-        arf2 h6 = ≥->-trans (≤-to-≥ h6) (>-≡→> δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h6)))
+        arf2 h6 = ≥->-trans (≤-to-≥ h6) (>-≡→>-1 δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h6)))
 
         arf3 : δ₁ ≤ δ₂ → dist x a < δ₁
         arf3 h7 = <-≡→< h3 (minxy-l δ₁ δ₂ h7)
@@ -126,10 +126,10 @@ cte-lim a L k f ε ε>0 = exist ε p-helper
 
 
         arf5 : δ₁ ≤ δ₂ → δ₂ > r₀
-        arf5 h9 = ≥->-trans (≤-to-≥ h9) (>-≡→> δ>0 (minxy-l δ₁ δ₂ h9))
+        arf5 h9 = ≥->-trans (≤-to-≥ h9) (>-≡→>-1 δ>0 (minxy-l δ₁ δ₂ h9))
 
         arf6 : δ₂ ≤ δ₁ → δ₂ > r₀
-        arf6 h10 = >-≡→> δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h10))
+        arf6 h10 = >-≡→>-1 δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h10))
 
         arf7 : δ₁ ≤ δ₂ → dist x a < δ₂
         arf7 h11 = case arf71 arf72 h11
