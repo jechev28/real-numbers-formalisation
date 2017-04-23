@@ -313,14 +313,6 @@ mul-x-y {x} {y} =
       x * y + (- x) * z   ≡⟨ subst (λ w → x * y + (- x) * z ≡ x * y + w) mul-xy (refl (x * y + (- x) * z)) ⟩
       x * y - x * z ∎
 
--- Trichotomy properties.
-
--- >⊕<→≢ : (x y : ℝ) → (x > y) ⊕ (x < y) → x ≢ y
--- >⊕<→≢ x y h x≡y = p⊕q→p→¬q (trichotomy₁ x y) x≡y h
-
--- ≡⊕<→≯ : (x y : ℝ) → (x ≡ y) ⊕ (x < y) → x ≯ y
--- ≡⊕<→≯ x y h x>y = p⊕q→p→¬q (trichotomy x y) x>y h
-
 >-asym : {x y : ℝ} → x > y → x ≮ y
 >-asym {x} {y} x>y x<y = case prf₁ prf₂ (trichotomy x y)
   where
@@ -346,12 +338,6 @@ mul-x-y {x} {y} =
 
     prf2 : x ≡ y → ⊥
     prf2 x≡y = >→≢ (<-to-> x<y) (≡-sym x≡y)
-
--- ≯∧≢→< : {x y : ℝ} → x ≯ y ∧ x ≢ y → x < y
--- ≯∧≢→< {x} {y} (x≯y , x≢y) = p⊕q→¬p→q (dichotomy-01 x y x≢y) x≯y
-
--- ≯∧≮→≡ : {x y : ℝ} → (x ≯ y) ∧ (x ≮ y) → x ≡ y
--- ≯∧≮→≡ {x} {y} (x≯y , x≮y) = p⊕q→¬p→q (dichotomy-02 x y x≮y) x≯y
 
 ≢∧≮→> : {x y : ℝ} → (x ≢ y) ∧ (x ≮ y) → x > y
 ≢∧≮→> {x} {y} (x≢y , x≮y) = case prf₁ prf₂ (trichotomy x y)
@@ -849,34 +835,3 @@ TPS1 x =
   r₁ * r₁ ⁻¹ ≡⟨ *-comm r₁ (r₁ ⁻¹) ⟩
   r₁ ⁻¹ * r₁ ≡⟨ *-neut (r₁ ⁻¹) ⟩
   r₁ ⁻¹      ∎
-
--- Bridges, D. S. (1999). Constructive Mathematics: a Foundation for Computable
--- Analysis. Theoretical Computer Science 219.1, pag 103.
-
-postulate
-  archimedean : (x : ℝ) → ∃ₙ (λ n → ℕ2ℝ n > x)
-
--- Application of the Archimedean property.
--- D.Bridges-1999-Page-105-Exercise-25.
-
-nx>y : (x y : ℝ) → x > r₀ → ∃ₙ (λ n → ℕ2ℝ n * x > y)
-nx>y x y x>r₀ = p₁-helper x>r₀ (p₂-helper x>r₀ (p₃-helper))
-
-  where
-    p₁-helper : x > r₀ → ∃ₙ (λ n → ℕ2ℝ n * x > (y * x ⁻¹) * x) → ∃ₙ (λ n → ℕ2ℝ n * x > y)
-    p₁-helper x>r₀ (exist n₁ x₁) = exist n₁ (subst₂ (λ t₁ t₂ → t₁ > t₂) (refl (ℕ2ℝ n₁ * x)) p-helper x₁)
-
-     where
-       p-helper : (y * x ⁻¹) * x ≡ y
-       p-helper =
-        (y * x ⁻¹) * x  ≡⟨ *-asso y (x ⁻¹) x  ⟩
-        y * (x ⁻¹ * x)  ≡⟨ subst (λ w → y * (x ⁻¹ * x) ≡ y * w) (*-comm (x ⁻¹) x) (refl (y * (x ⁻¹ * x))) ⟩
-        y * (x * x ⁻¹)  ≡⟨ subst (λ w → y * (x * x ⁻¹) ≡ y * w) (*-inve x (>→≢ x>r₀)) (refl (y * (x * x ⁻¹))) ⟩
-        y * r₁          ≡⟨ *-neut y ⟩
-        y             ∎
-
-    p₂-helper : x > r₀  → ∃ₙ (λ n → ℕ2ℝ n > y * x ⁻¹) → ∃ₙ (λ n → ℕ2ℝ n * x > (y * x ⁻¹) * x)
-    p₂-helper x>r₀ (exist n₁ x₁ ) = exist n₁ (>-*-cong-r x>r₀ x₁)
-
-    p₃-helper : ∃ₙ (λ n → ℕ2ℝ n > y * x ⁻¹)
-    p₃-helper = archimedean (y * x ⁻¹)
