@@ -15,6 +15,11 @@ open import Nat
   x + z ≡⟨ subst (λ w → (x + z) ≡ w + z) h (refl (x + z)) ⟩
   y + z ∎
 
+≡-+-cong-l : {x y z : ℝ} → x ≡ y → z + x ≡ z + y
+≡-+-cong-l {x} {y} {z} x=y =
+  z + x ≡⟨ subst (λ w → (z + x) ≡ z + w) x=y (refl (z + x)) ⟩
+  z + y ∎
+
 ≡-*-cong-r : {x y : ℝ} (z : ℝ)→ x ≡ y → x * z ≡ y * z
 ≡-*-cong-r {x} {y} z h =
   x * z ≡⟨ subst (λ w → (x * z) ≡ w * z) h (refl (x * z)) ⟩
