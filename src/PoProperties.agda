@@ -6,11 +6,8 @@ open import EqProperties
 open import Logic
 open import Properties
 
->-=-to-> : {x y z : ℝ} → x > y → y ≡ z → x > z
->-=-to-> x>y (refl x) = x>y
-
-=->-to-> : {x y z : ℝ} → x ≡ y → y > z → x > z
-=->-to-> (refl x) y>z = y>z
+>-≡→>-2 : {x y z : ℝ} → x > y → y ≡ z → x > z
+>-≡→>-2 x>y (refl x) = x>y
 
 ≥-refl : {x : ℝ} → x ≥ x
 ≥-refl {x} = inj₂ (refl x)
@@ -25,13 +22,13 @@ open import Properties
        prf11 y>z = inj₁ (>-trans x>y y>z)
 
        prf12 : y ≡ z → (x > z) ∨ (x ≡ z)
-       prf12 y≡z = inj₁ (>-=-to-> x>y y≡z)
+       prf12 y≡z = inj₁ (>-≡→>-2 x>y y≡z)
 
     prf2 : x ≡ y → (x > z) ∨ (x ≡ z)
     prf2 x≡y = case prf21 prf22 y≥z
      where
        prf21 : y > z → (x > z) ∨ (x ≡ z)
-       prf21 y>z = inj₁ (=->-to-> x≡y y>z)
+       prf21 y>z = inj₁ (≡->→> x≡y y>z)
 
        prf22 : y ≡ z → (x > z) ∨ (x ≡ z)
        prf22 y≡z = inj₂ (≡-trans x≡y y≡z)

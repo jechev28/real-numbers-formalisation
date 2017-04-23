@@ -16,8 +16,8 @@ open import Nat
 ≡->→> : {x y z : ℝ} → x ≡ y → y > z → x > z
 ≡->→> (refl x) y>z = y>z
 
->-≡→> : {x y z : ℝ} → x > z → x ≡ y → y > z
->-≡→> x>z (refl x) = x>z
+>-≡→>-1 : {x y z : ℝ} → x > z → x ≡ y → y > z
+>-≡→>-1 x>z (refl x) = x>z
 
 <-≡→< : {x y z : ℝ} → x < y → y ≡ z → x < z
 <-≡→< x<y (refl x₁) = x<y
