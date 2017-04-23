@@ -38,3 +38,27 @@ x<0→absx=-x : (x : ℝ) → x < r₀ → abs x ≡ - x
 x<0→absx=-x x x<0 with case-abs x
 ... | inj₁ p = refl (- x)
 ... | inj₂ p = ⊥-elim (≥→≮ p x<0)
+
+abs-minus : (x : ℝ) → abs (- x) ≡ abs x
+abs-minus x with case-abs (- x)
+... | inj₁ p = ≡-sym (p-helper p)
+
+  where
+   p-helper : - x < r₀ → abs x ≡ - (- x)
+   p-helper -x<0 =
+     abs x   ≡⟨ x>0→absx=x x (-x<0→x>0 x -x<0) ⟩
+     x       ≡⟨ ≡-sym mul--x ⟩
+     - (- x) ∎
+
+... | inj₂ p = case prf1 prf2 p
+
+  where
+   prf1 : - x > r₀ → - x ≡ abs x
+   prf1 -x>0 = ≡-sym (x<0→absx=-x x (-x>0→x<0 -x>0))
+
+   prf2 : - x ≡ r₀ → - x ≡ abs x
+   prf2 -x=0 =
+     - x       ≡⟨ -x=0 ⟩
+     r₀        ≡⟨ ≡-sym abs-0 ⟩
+     abs r₀    ≡⟨ subst ((λ w → abs r₀ ≡ abs w)) (≡-sym (-x=0→x=0 x -x=0)) (refl (abs r₀)) ⟩
+     abs x     ∎
