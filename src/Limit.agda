@@ -26,7 +26,6 @@ postulate
 -- Pending to prove.
 postulate
   dis-des : (x y z w : ℝ) → dist (x + z) (y + w) ≤ dist x y + dist z w
-  trans-<-+ : {x y z w : ℝ} → x < y → z < w → x + z < y + w
 
 -- Previous properties.
 
@@ -99,7 +98,7 @@ cte-lim a L k f ε ε>0 = exist ε p-helper
 
     where
      a₂-helaer : min δ₁ δ₂ > r₀ → (x : ℝ) → dist x a < min δ₁ δ₂ → dist (f₁ x + f₂ x) (L₁ + L₂) < ε
-     a₂-helaer δ>0 x h3 = ≤-<-trans (dis-des (f₁ x) L₁ (f₂ x) L₂) (a₃-helaer (trans-<-+ (l₁ (case arf1 arf2 (≤-∨ δ₁ δ₂)) x
+     a₂-helaer δ>0 x h3 = ≤-<-trans (dis-des (f₁ x) L₁ (f₂ x) L₂) (a₃-helaer (<-<-+ (l₁ (case arf1 arf2 (≤-∨ δ₁ δ₂)) x
                           (case arf3 arf4 (≤-∨ δ₁ δ₂))) (l₂ (case arf5 arf6 (≤-∨ δ₁ δ₂)) x (case arf7 arf8 (≤-∨ δ₁ δ₂))) ))
 
        where
