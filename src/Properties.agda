@@ -10,6 +10,9 @@ open import Nat
 ≡-<→< : {x y z : ℝ} → x ≡ y → y < z → x < z
 ≡-<→< (refl x) y<z = y<z
 
+<-=-→-< : {x y z : ℝ} → x < y → y ≡ z → x < z
+<-=-→-< x<y (refl y) = x<y
+
 ≡-+-cong-r : {x y z : ℝ} → x ≡ y → x + z ≡ y + z
 ≡-+-cong-r {x} {y} {z} h =
   x + z ≡⟨ subst (λ w → (x + z) ≡ w + z) h (refl (x + z)) ⟩
