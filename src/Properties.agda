@@ -13,6 +13,15 @@ open import Nat
 <-=-→-< : {x y z : ℝ} → x < y → y ≡ z → x < z
 <-=-→-< x<y (refl y) = x<y
 
+≡->→> : {x y z : ℝ} → x ≡ y → y > z → x > z
+≡->→> (refl x) y>z = y>z
+
+>-≡→> : {x y z : ℝ} → x > z → x ≡ y → y > z
+>-≡→> x>z (refl x) = x>z
+
+<-≡→< : {x y z : ℝ} → x < y → y ≡ z → x < z
+<-≡→< x<y (refl x₁) = x<y
+
 ≡-+-cong-r : {x y z : ℝ} → x ≡ y → x + z ≡ y + z
 ≡-+-cong-r {x} {y} {z} h =
   x + z ≡⟨ subst (λ w → (x + z) ≡ w + z) h (refl (x + z)) ⟩
@@ -491,15 +500,6 @@ mul-x-y {x} {y} =
 
 <-trans : {x y z : ℝ} → x < y → y < z → x < z
 <-trans {x} {y} {z} x<y y<z = >-to-< (>-trans (<-to-> y<z) (<-to-> x<y))
-
-≡->→> : {x y z : ℝ} → x ≡ y → y > z → x > z
-≡->→> (refl x) y>z = y>z
-
->-≡→> : {x y z : ℝ} → x > z → x ≡ y → y > z
->-≡→> x>z (refl x) = x>z
-
-<-≡→< : {x y z : ℝ} → x < y → y ≡ z → x < z
-<-≡→< x<y (refl x₁) = x<y
 
 <-+-left : {x y z : ℝ} → x < y → z + x < z + y
 <-+-left {x} {y} {z} x<y = >-to-< (>-+-left (<-to-> x<y))
