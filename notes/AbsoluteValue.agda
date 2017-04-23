@@ -102,3 +102,57 @@ abs≥x x with case-abs x
           x             ∎
 
 ... | inj₂ p = inj₂ (refl x)
+
+abs-minus≤x : (x : ℝ) → - (abs x) ≤ x
+abs-minus≤x x with case-abs x
+... | inj₁ p = inj₂ mul--x
+... | inj₂ p = case prf1 prf2 p
+
+  where
+   prf1 : x > r₀ → x > - x ∨ - x ≡ x
+   prf1 x>0 = inj₁ (<-to-> (minus-to-< (p₁-helper (p₂-helper (p₃-helper
+                                       (p₄-helper (p₅-helper (p₆-helper (p₇-helper x>0)))))))))
+
+    where
+     p₁-helper : x + x > r₀ → x - - x > r₀
+     p₁-helper h₁ = subst₂ (λ t₁ t₂ → t₁ > t₂ ) (subst (λ w → x + x ≡ x + w)
+                                                        (≡-sym mul--x) (refl (x + x))) (refl r₀) h₁
+
+     p₂-helper : (ℕ2ℝ 2 * x) > r₀ → x + x > r₀
+     p₂-helper 2x>0 = subst₂ (λ t₁ t₂ → t₁ > t₂) 2x=x+x (refl r₀) 2x>0
+
+     p₃-helper : ℕ2ℝ 2 ⁻¹ * (ℕ2ℝ 2 * x) > ℕ2ℝ 2 ⁻¹ * r₀ → (ℕ2ℝ 2 * x) > r₀
+     p₃-helper h₂ = >-*-cancel-l (>-inve-r₀ (>-trans 2>1 1>0)) h₂
+
+     p₄-helper : (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x > r₀ → ℕ2ℝ 2 ⁻¹ * (ℕ2ℝ 2 * x) > ℕ2ℝ 2 ⁻¹ * r₀
+     p₄-helper h₃ = subst₂ (λ t₁ t₂ → t₁ > t₂) (*-asso (ℕ2ℝ 2 ⁻¹) (ℕ2ℝ 2) x) (≡-sym *-right-zero) h₃
+
+     p₅-helper : (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x > r₀ → (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) * x > r₀
+     p₅-helper h₄ = subst₂ (λ t₁ t₂ → t₁ > t₂) (subst (λ w → (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x ≡ w * x) (*-comm (ℕ2ℝ 2)
+                                                       (ℕ2ℝ 2 ⁻¹)) (refl ((ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x))) (refl r₀) h₄
+
+     p₆-helper : r₁ * x > r₀ → (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) * x > r₀
+     p₆-helper 1*x>0 = subst₂ (λ t₁ t₂ → t₁ > t₂) (subst (λ w → r₁ * x ≡ w * x) (≡-sym (*-inve (ℕ2ℝ 2)
+                                                          (>→≢ (>-trans 2>1 1>0)))) (refl (r₁ * x))) (refl r₀) 1*x>0
+
+     p₇-helper : x > r₀ → r₁ * x > r₀
+     p₇-helper x>0 = subst₂ (λ t₁ t₂ → t₁ > t₂) p₇₁-helper (refl r₀) x>0
+
+       where
+        p₇₁-helper : x ≡ r₁ * x
+        p₇₁-helper =
+            x      ≡⟨ ≡-sym (*-neut x) ⟩
+            x * r₁ ≡⟨ *-comm x r₁ ⟩
+            r₁ * x  ∎
+
+   prf2 : x ≡ r₀ → x > - x ∨ - x ≡ x
+   prf2 x=0 = inj₂ p₁-helper
+
+    where
+     p₁-helper : - x ≡ x
+     p₁-helper =
+        - x        ≡⟨ *-negation ⟩
+        (- r₁) * x ≡⟨ subst (λ w → (- r₁) * x ≡ (- r₁) * w) x=0 (refl ((- r₁) * x)) ⟩
+        - r₁ * r₀  ≡⟨ *-right-zero ⟩
+        r₀         ≡⟨ ≡-sym x=0 ⟩
+        x          ∎
