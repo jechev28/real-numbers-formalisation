@@ -14,7 +14,6 @@ open import Properties
 -- Pending to prove.
 postulate
   dis-des : (x y z w : ℝ) → dist (x + z) (y + w) ≤ dist x y + dist z w
-  d-tri  : (x y z : ℝ) → dist x y ≤ dist x z + dist z y
 
 -- Previous properties.
 
