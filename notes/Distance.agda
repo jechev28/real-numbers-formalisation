@@ -99,3 +99,36 @@ d-sym x y with case-abs (x - y)
            r₀          ≡⟨ ≡-sym (+-inve y) ⟩
            y - y       ≡⟨ subst (λ w → y - y ≡ w - y) (≡-sym (x-y=0→x=y x y h₃)) (refl (y - y)) ⟩
            x - y        ∎
+
+d-tri  : (x y z : ℝ) → dist x y ≤ dist x z + dist z y
+d-tri x y z = p₁-helper (p₂-helper)
+
+  where
+   p₁-helper : abs ((x - z) + (z - y)) ≤ abs (x - z) + abs (z - y) → dist x y ≤ dist x z + dist z y
+   p₁-helper h = subst₂ (λ t₁ t₂ → t₁ ≤ t₂) p₁₂-helper (refl (abs (x - z) + abs (z - y))) h
+
+    where
+     p₁₂-helper : abs ((x - z) + (z - y)) ≡ dist x y
+     p₁₂-helper =
+         abs ((x - z) + (z - y))
+         ≡⟨ subst (λ w → abs ((x - z) + (z - y)) ≡ abs w) (+-asso x (- z) (z - y))
+                  (refl (abs ((x - z) + (z - y)))) ⟩
+         abs (x + (- z + (z - y)))
+         ≡⟨ subst (λ w → abs (x + (- z + (z - y))) ≡ abs (x + w)) (≡-sym (+-asso (- z) z (- y)))
+                   (refl (abs (x + (- z + (z - y))))) ⟩
+         abs (x + ((- z + z) - y))
+         ≡⟨ subst (λ w → abs (x + ((- z + z) - y)) ≡ abs (x + ((w) - y))) (+-comm (- z) z)
+                  (refl (abs (x + ((- z + z) - y)))) ⟩
+         abs (x + ((z - z) - y))
+         ≡⟨ subst (λ w → abs (x + ((z - z) - y)) ≡ abs (x + ((w - y)))) (+-inve z)
+                  (refl (abs (x + ((z - z) - y)))) ⟩
+         abs (x + ((r₀ - y)))
+         ≡⟨ subst (λ w → abs (x + ((r₀ - y))) ≡ abs (x + ((w)))) (+-comm r₀ (- y))
+                  (refl (abs (x + ((r₀ - y))))) ⟩
+         abs (x + (- y + r₀))
+         ≡⟨ subst (λ w → abs (x + (- y + r₀)) ≡ abs (x + w)) (+-neut (- y))
+                  (refl (abs (x + (- y + r₀)))) ⟩
+         dist x y     ∎
+
+   p₂-helper : abs ((x - z) + (z - y)) ≤ abs (x - z) + abs (z - y)
+   p₂-helper = abs-tri (x - z) (z - y)
