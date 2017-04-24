@@ -132,3 +132,33 @@ d-tri x y z = p₁-helper (p₂-helper)
 
    p₂-helper : abs ((x - z) + (z - y)) ≤ abs (x - z) + abs (z - y)
    p₂-helper = abs-tri (x - z) (z - y)
+
+dis-des : (x y z w : ℝ) → dist (x + z) (y + w) ≤ dist x y + dist z w
+dis-des x y z w = p₁-helper (abs-tri (x - y) (z - w))
+
+  where
+   p₁-helper : abs ((x - y) + (z - w)) ≤ abs (x - y) + abs (z - w) → dist (x + z) (y + w) ≤ dist x y + dist z w
+   p₁-helper h = subst₂ (λ t₁ t₂ → t₁ ≤ t₂) p₁₁-helper (refl (abs (x - y) + abs (z - w))) h
+
+    where
+     p₁₁-helper : abs (x - y + (z - w)) ≡ dist (x + z) (y + w)
+     p₁₁-helper =
+        abs (x - y + (z - w))
+        ≡⟨ subst (λ k → abs (x - y + (z - w)) ≡ abs k) (+-asso x (- y) (z - w))
+                 (refl (abs (x - y + (z - w)))) ⟩
+        abs (x + (- y + (z - w)))
+        ≡⟨ subst (λ k → abs (x + (- y + (z - w))) ≡ abs (x + k)) (≡-sym (+-asso (- y) z (- w)))
+                 (refl (abs (x + (- y + (z - w))))) ⟩
+        abs (x + ((- y + z) - w))
+        ≡⟨ subst (λ k → abs (x + ((- y + z) - w)) ≡ abs (x + (k - w))) (+-comm (- y) z)
+                 (refl (abs (x + ((- y + z) - w)))) ⟩
+        abs (x + ((z - y) - w))
+        ≡⟨ subst (λ k → abs (x + ((z - y) - w)) ≡ abs (x + k)) (+-asso z (- y) (- w))
+                 (refl (abs (x + ((z - y) - w)))) ⟩
+        abs (x + (z + (- y - w)))
+        ≡⟨ subst (λ k → abs (x + (z + (- y - w))) ≡ abs k) (≡-sym (+-asso x z (- y - w)))
+                 (refl (abs (x + (z + (- y - w))))) ⟩
+        abs ((x + z) + (- y - w))
+        ≡⟨ subst (λ k → abs ((x + z) + (- y - w)) ≡ abs ((x + z) + k)) (≡-sym mul-x+y)
+                 (refl (abs ((x + z) + (- y - w)))) ⟩
+        dist (x + z) (y + w)      ∎
