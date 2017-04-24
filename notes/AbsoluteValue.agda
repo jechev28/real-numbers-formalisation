@@ -7,6 +7,7 @@ open import Exp
 open import Logic
 open import Min
 open import Nat
+open import PoProperties
 open import Properties
 
 case-abs : (x : ℝ) → (x < r₀) ∨ (x ≥ r₀)
@@ -156,3 +157,26 @@ abs-minus≤x x with case-abs x
         - r₁ * r₀  ≡⟨ *-right-zero ⟩
         r₀         ≡⟨ ≡-sym x=0 ⟩
         x          ∎
+
+x+y≤absx+absy : (x y : ℝ) → x + y ≤ abs x + abs y
+x+y≤absx+absy x y = ≤-≤-+ (≥-to-≤ (abs≥x x)) (≥-to-≤ (abs≥x y))
+
+-absx+-absy≤x+y : (x y : ℝ) → - (abs x) + ( - abs y) ≤ x + y
+-absx+-absy≤x+y x y = ≤-≤-+ (abs-minus≤x x) (abs-minus≤x y)
+
+abs-tri : (x y : ℝ) → abs (x + y) ≤ abs x + abs y
+abs-tri x y with case-abs (x + y)
+... | inj₁ p = p₁-helper
+
+  where
+   p₁-helper : - (x + y) ≤ abs x + abs y
+   p₁-helper = p₁₁-helper (≤-to-≥ (p₁₂-helper (-absx+-absy≤x+y x y)))
+
+    where
+     p₁₁-helper : x + y ≥ - (abs x + abs y) → - (x + y) ≤ abs x + abs y
+     p₁₁-helper h₁ = x≥-y→-x≤y (x + y) (abs x + abs y) h₁
+
+     p₁₂-helper : - (abs x) + ( - abs y) ≤ x + y → - (abs x + abs y) ≤ x + y
+     p₁₂-helper h₂ = subst₂ (λ t₁ t₂ → t₁ ≤ t₂) (≡-sym mul-x+y) (refl (x + y)) h₂
+
+... | inj₂ p = x+y≤absx+absy x y
