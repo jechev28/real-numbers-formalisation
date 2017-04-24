@@ -11,10 +11,6 @@ open import Min
 open import Nat
 open import Properties
 
--- Pending to prove.
-postulate
-  dis-des : (x y z w : ℝ) → dist (x + z) (y + w) ≤ dist x y + dist z w
-
 -- Previous properties.
 
 x>0-to-x/2>0 : (x : ℝ) → x > r₀ → x * (ℕ2ℝ 2) ⁻¹ > r₀
