@@ -180,3 +180,11 @@ abs-tri x y with case-abs (x + y)
      p₁₂-helper h₂ = subst₂ (λ t₁ t₂ → t₁ ≤ t₂) (≡-sym mul-x+y) (refl (x + y)) h₂
 
 ... | inj₂ p = x+y≤absx+absy x y
+
+abs-tri-minus : (x y : ℝ) → abs (x - y) ≤ abs x + abs y
+abs-tri-minus x y = p-helper x y (abs-tri x (- y))
+
+  where
+   p-helper : (x y : ℝ) → abs (x + (- y)) ≤ abs x + abs ( - y) → abs (x - y) ≤ abs x + abs y
+   p-helper x y h = subst₂ (λ t₁ t₂ → t₁ ≤ t₂) (refl (abs (x + (- y))))
+                           (subst (λ w → abs x + abs ( - y) ≡ abs x + w) (abs-minus y) (refl (abs x + abs ( - y)))) h
