@@ -55,8 +55,8 @@ data ⊥ : Set where
 ∧-comm : {A B : Set} → A ∧ B → B ∧ A
 ∧-comm h = (∧-proj₂ h) , ∧-proj₁ h
 
-postulate
-  ∧-assoc₁ : {A B C : Set} → A ∧ (B ∧ C) → (A ∧ B) ∧ C
+∧-assoc₁ : {A B C : Set} → A ∧ (B ∧ C) → (A ∧ B) ∧ C
+∧-assoc₁ {A₁} {B₁} {C} (x , x₁ , x₂) = (x , x₁) , x₂
 
 ∧-assoc₂ : {A B C : Set} → (A ∧ B) ∧ C → A ∧ (B ∧ C)
 ∧-assoc₂ {A} {B} {C} h = ∧-proj₁ (∧-proj₁ h) , ∧-proj₁ (∧-comm (∧-proj₁ h)) , ∧-proj₂ h
