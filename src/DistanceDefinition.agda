@@ -9,3 +9,4 @@ open import RealNumbersAxioms
 
 dist : ℝ → ℝ → ℝ
 dist x y = abs (x - y)
+{-# ATP definition dist #-}
