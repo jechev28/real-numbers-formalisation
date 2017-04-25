@@ -8,6 +8,19 @@ open import PoProperties
 open import Properties
 open import Nat
 
+-- dichotomy : (x y : ℝ) → (x > y) ∨ (x ≡ y) ∨ (x < y)
+-- dichotomy x y = case prf1 (case prf2 prf3) (trichotomy x y)
+
+--   where
+--    prf1 : x > y ∧ ¬ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
+--    prf1 (x>y , h) = inj₁ x>y
+
+--    prf2 : ¬ x > y ∧ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
+--    prf2 (x≯y , x=y , x≮y) = ∨-comm (∨-assoc₁ (inj₁ x=y))
+
+--    prf3 : ¬ x > y ∧ ¬ x ≡ y ∧ x < y → x > y ∨ x ≡ y ∨ x < y
+--    prf3 (x≯y , x≠y , x<y) = ∨-assoc₂ (inj₂ x<y)
+
 -- Example 1.
 
 A : ℝ → Set
@@ -56,7 +69,7 @@ bar1 : Bound B
 bar1 = exist (ℕ2ℝ 5) UBB5
 
 -- UBB5≤ub : (ub : ℝ) → UpperBound B ub → (ℕ2ℝ 5) ≤ ub
--- UBB5≤ub ub Bub = case prf1 (case prf2 prf3) ( ⊕⊕→∨∨ (trichotomy ub (ℕ2ℝ 5)) )
+-- UBB5≤ub ub Bub = case prf1 (case prf2 prf3) ((dichotomy ub (ℕ2ℝ 5)) )
 
 --   where
 --    prf1 : ub > ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
@@ -106,7 +119,7 @@ bar1 = exist (ℕ2ℝ 5) UBB5
 
 --       p₂-helper : (ub + (ℕ2ℝ 5)) * (ℕ2ℝ 2)⁻¹ ≤ ub
 --       p₂-helper = Bub ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) (p₂₁-helper (p₂₂-helper (p₂₃-helper (p₂₄-helper (p₂₅-helper
---                   (p₂₆-helper (<-+-cong-r h₃)))))))
+--                   (p₂₆-helper (<-+-right h₃)))))))
 
 --         where
 --          p₂₁-helper : ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 5 * ℕ2ℝ 2 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5
