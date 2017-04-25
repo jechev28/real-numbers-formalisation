@@ -61,6 +61,34 @@ postulate
 ∧-assoc₂ : {A B C : Set} → (A ∧ B) ∧ C → A ∧ (B ∧ C)
 ∧-assoc₂ {A} {B} {C} h = ∧-proj₁ (∧-proj₁ h) , ∧-proj₁ (∧-comm (∧-proj₁ h)) , ∧-proj₂ h
 
+∨-assoc₁ : (A B C : Set) → A ∨ (B ∨ C) → (A ∨ B) ∨ C
+∨-assoc₁ A B C h = case prf1 prf2 h
+
+  where
+   prf1 : A → (A ∨ B) ∨ C
+   prf1 A = inj₁ (inj₁ A)
+
+   prf2 : B ∨ C → (A ∨ B) ∨ C
+   prf2 B∨C = case prf11 prf22 B∨C
+
+    where
+     prf11 : B → (A ∨ B) ∨ C
+     prf11 B = inj₁ (inj₂ B)
+
+     prf22 : C → (A ∨ B) ∨ C
+     prf22 C = inj₂ C
+
+∨-assoc₂ : (A B C : Set) → (A ∨ B) ∨ C → A ∨ (B ∨ C)
+∨-assoc₂ A B C (inj₁ h) = case prf1 prf2 h
+
+  where
+   prf1 : A → A ∨ B ∨ C
+   prf1 A = inj₁ A
+
+   prf2 : B → A ∨ B ∨ C
+   prf2 B = inj₂ (inj₁ B)
+∨-assoc₂ A B C (inj₂ C₁) = inj₂ (inj₂ C₁)
+
 -- Principle of non-contradiction
 pnc : {P : Set} → P ∧ ¬ P → ⊥
 pnc (p , ¬p) = ¬p p
