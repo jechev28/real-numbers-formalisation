@@ -14,3 +14,6 @@ test-aux : $(agda_files)
 test :
 	make test-aux
 	@echo "$@ succeeded!"
+
+clean :
+	rm -f *.agdai
