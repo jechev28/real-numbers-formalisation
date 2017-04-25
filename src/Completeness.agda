@@ -8,18 +8,18 @@ open import PoProperties
 open import Properties
 open import Nat
 
--- dichotomy : (x y : ℝ) → (x > y) ∨ (x ≡ y) ∨ (x < y)
--- dichotomy x y = case prf1 (case prf2 prf3) (trichotomy x y)
+dichotomy : (x y : ℝ) → (x > y) ∨ (x ≡ y) ∨ (x < y)
+dichotomy x y = case prf1 (case prf2 prf3) (trichotomy x y)
 
---   where
---    prf1 : x > y ∧ ¬ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
---    prf1 (x>y , h) = inj₁ x>y
+  where
+   prf1 : x > y ∧ ¬ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
+   prf1 (x>y , h) = inj₁ x>y
 
---    prf2 : ¬ x > y ∧ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
---    prf2 (x≯y , x=y , x≮y) = ∨-comm (∨-assoc₁ (inj₁ x=y))
+   prf2 : ¬ x > y ∧ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
+   prf2 (x≯y , x=y , x≮y) = ∨-comm (∨-assoc₁ (inj₁ x=y))
 
---    prf3 : ¬ x > y ∧ ¬ x ≡ y ∧ x < y → x > y ∨ x ≡ y ∨ x < y
---    prf3 (x≯y , x≠y , x<y) = ∨-assoc₂ (inj₂ x<y)
+   prf3 : ¬ x > y ∧ ¬ x ≡ y ∧ x < y → x > y ∨ x ≡ y ∨ x < y
+   prf3 (x≯y , x≠y , x<y) = ∨-assoc₂ (inj₂ x<y)
 
 -- Example 1.
 
@@ -68,94 +68,94 @@ UBB6 x B6 = inj₁ (<-trans B6 (<-+-left (<-+-left (<-+-left (<-+-left (<-+-left
 bar1 : Bound B
 bar1 = exist (ℕ2ℝ 5) UBB5
 
--- UBB5≤ub : (ub : ℝ) → UpperBound B ub → (ℕ2ℝ 5) ≤ ub
--- UBB5≤ub ub Bub = case prf1 (case prf2 prf3) ((dichotomy ub (ℕ2ℝ 5)) )
+UBB5≤ub : (ub : ℝ) → UpperBound B ub → (ℕ2ℝ 5) ≤ ub
+UBB5≤ub ub Bub = case prf1 (case prf2 prf3) ((dichotomy ub (ℕ2ℝ 5)) )
 
---   where
---    prf1 : ub > ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
---    prf1 h₁ = inj₁ (>-to-< h₁)
+  where
+   prf1 : ub > ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
+   prf1 h₁ = inj₁ (>-to-< h₁)
 
---    prf2 : ub ≡ ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
---    prf2 h₂ = inj₂ (≡-sym h₂)
+   prf2 : ub ≡ ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
+   prf2 h₂ = inj₂ (≡-sym h₂)
 
---    prf3 : ub < ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
---    prf3 h₃ = inj₁ (⊥-elim (<→≱ p₁-helper (≤-to-≥ p₂-helper)))
+   prf3 : ub < ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub
+   prf3 h₃ = inj₁ (⊥-elim (<→≱ p₁-helper (≤-to-≥ p₂-helper)))
 
---      where
---       p₁-helper : ub < (ub + (ℕ2ℝ 5)) * (ℕ2ℝ 2)⁻¹
---       p₁-helper = p₁₁-helper
---                     (p₁₂-helper
---                      (p₁₃-helper
---                       (p₁₄-helper
---                        (p₁₅-helper (p₁₆-helper (p₁₇-helper (<-+-left h₃)))))))
+     where
+      p₁-helper : ub < (ub + (ℕ2ℝ 5)) * (ℕ2ℝ 2)⁻¹
+      p₁-helper = p₁₁-helper
+                    (p₁₂-helper
+                     (p₁₃-helper
+                      (p₁₄-helper
+                       (p₁₅-helper (p₁₆-helper (p₁₇-helper (<-+-left h₃)))))))
 
---        where
---         p₁₁-helper : ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 → ub < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2)⁻¹
---         p₁₁-helper h₃₁ = >-to-< (>-*-cancel-r (>-trans 2>1 1>0) (<-to-> h₃₁))
+       where
+        p₁₁-helper : ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 → ub < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2)⁻¹
+        p₁₁-helper h₃₁ = >-to-< (>-*-cancel-r (>-trans 2>1 1>0) (<-to-> h₃₁))
 
---         p₁₂-helper : ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 ) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2
---         p₁₂-helper h₃₂ = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) (≡-sym (*-asso (ub + ℕ2ℝ 5) (ℕ2ℝ 2 ⁻¹) (ℕ2ℝ 2))) h₃₂
+        p₁₂-helper : ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 ) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2
+        p₁₂-helper h₃₂ = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) (≡-sym (*-asso (ub + ℕ2ℝ 5) (ℕ2ℝ 2 ⁻¹) (ℕ2ℝ 2))) h₃₂
 
---         p₁₃-helper : ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * ( ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹ ) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 )
---         p₁₃-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) p₁₃₁-helper
+        p₁₃-helper : ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * ( ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹ ) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2 )
+        p₁₃-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) p₁₃₁-helper
 
---           where
---            p₁₃₁-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2)
---            p₁₃₁-helper = subst (λ w → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * w) (*-comm (ℕ2ℝ 2)
---                         (ℕ2ℝ 2 ⁻¹)) (refl ((ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)))
+          where
+           p₁₃₁-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2)
+           p₁₃₁-helper = subst (λ w → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * w) (*-comm (ℕ2ℝ 2)
+                        (ℕ2ℝ 2 ⁻¹)) (refl ((ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)))
 
---         p₁₄-helper :  ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * r₁ → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)
---         p₁₄-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) (subst (λ w → (ub + ℕ2ℝ 5) * r₁ ≡ (ub + ℕ2ℝ 5) * w)
---                     (≡-sym (*-inve (ℕ2ℝ 2) (>→≢ (>-trans 2>1 1>0)))) (refl ((ub + ℕ2ℝ 5) * r₁)))
+        p₁₄-helper :  ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * r₁ → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)
+        p₁₄-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) (subst (λ w → (ub + ℕ2ℝ 5) * r₁ ≡ (ub + ℕ2ℝ 5) * w)
+                    (≡-sym (*-inve (ℕ2ℝ 2) (>→≢ (>-trans 2>1 1>0)))) (refl ((ub + ℕ2ℝ 5) * r₁)))
 
---         p₁₅-helper :  ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * r₁
---         p₁₅-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) (≡-sym (*-neut (ub + ℕ2ℝ 5)))
+        p₁₅-helper :  ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5) * r₁
+        p₁₅-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (ub * ℕ2ℝ 2)) (≡-sym (*-neut (ub + ℕ2ℝ 5)))
 
---         p₁₆-helper : ℕ2ℝ 2 * ub < (ub + ℕ2ℝ 5) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5)
---         p₁₆-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (*-comm (ℕ2ℝ 2) ub) (refl (ub + ℕ2ℝ 5))
+        p₁₆-helper : ℕ2ℝ 2 * ub < (ub + ℕ2ℝ 5) → ub * ℕ2ℝ 2 < (ub + ℕ2ℝ 5)
+        p₁₆-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (*-comm (ℕ2ℝ 2) ub) (refl (ub + ℕ2ℝ 5))
 
---         p₁₇-helper : ub + ub < (ub + ℕ2ℝ 5) → ℕ2ℝ 2 * ub < (ub + ℕ2ℝ 5)
---         p₁₇-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (≡-sym 2x=x+x) (refl (ub + ℕ2ℝ 5))
+        p₁₇-helper : ub + ub < (ub + ℕ2ℝ 5) → ℕ2ℝ 2 * ub < (ub + ℕ2ℝ 5)
+        p₁₇-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (≡-sym 2x=x+x) (refl (ub + ℕ2ℝ 5))
 
---       p₂-helper : (ub + (ℕ2ℝ 5)) * (ℕ2ℝ 2)⁻¹ ≤ ub
---       p₂-helper = Bub ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) (p₂₁-helper (p₂₂-helper (p₂₃-helper (p₂₄-helper (p₂₅-helper
---                   (p₂₆-helper (<-+-right h₃)))))))
+      p₂-helper : (ub + (ℕ2ℝ 5)) * (ℕ2ℝ 2)⁻¹ ≤ ub
+      p₂-helper = Bub ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) (p₂₁-helper (p₂₂-helper (p₂₃-helper (p₂₄-helper (p₂₅-helper
+                  (p₂₆-helper (<-+-right h₃)))))))
 
---         where
---          p₂₁-helper : ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 5 * ℕ2ℝ 2 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5
---          p₂₁-helper h₄ = >-to-< (>-*-cancel-r (>-trans 2>1 1>0) (<-to-> h₄))
+        where
+         p₂₁-helper : ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 5 * ℕ2ℝ 2 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5
+         p₂₁-helper h₄ = >-to-< (>-*-cancel-r (>-trans 2>1 1>0) (<-to-> h₄))
 
---          p₂₂-helper : ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 2 * ℕ2ℝ 5 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 5 * ℕ2ℝ 2
---          p₂₂-helper h₅ = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2)) (*-comm (ℕ2ℝ 2) (ℕ2ℝ 5)) h₅
+         p₂₂-helper : ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 2 * ℕ2ℝ 5 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 5 * ℕ2ℝ 2
+         p₂₂-helper h₅ = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2)) (*-comm (ℕ2ℝ 2) (ℕ2ℝ 5)) h₅
 
---          p₂₃-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) < ℕ2ℝ 5 + ℕ2ℝ 5 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 2 * ℕ2ℝ 5
---          p₂₃-helper h₆ = subst₂ (λ t₁ t₂ → t₁ < t₂) (≡-sym (*-asso (ub + ℕ2ℝ 5) (ℕ2ℝ 2 ⁻¹) (ℕ2ℝ 2))) (≡-sym 2x=x+x) h₆
+         p₂₃-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) < ℕ2ℝ 5 + ℕ2ℝ 5 → ((ub + ℕ2ℝ 5) * ℕ2ℝ 2 ⁻¹) * ℕ2ℝ 2 < ℕ2ℝ 2 * ℕ2ℝ 5
+         p₂₃-helper h₆ = subst₂ (λ t₁ t₂ → t₁ < t₂) (≡-sym (*-asso (ub + ℕ2ℝ 5) (ℕ2ℝ 2 ⁻¹) (ℕ2ℝ 2))) (≡-sym 2x=x+x) h₆
 
---          p₂₄-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5 + ℕ2ℝ 5 → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) < ℕ2ℝ 5 + ℕ2ℝ 5
---          p₂₄-helper h₇ = subst₂ (λ t₁ t₂ → t₁ < t₂) p-helper (refl (ℕ2ℝ 5 + ℕ2ℝ 5)) h₇
+         p₂₄-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5 + ℕ2ℝ 5 → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2) < ℕ2ℝ 5 + ℕ2ℝ 5
+         p₂₄-helper h₇ = subst₂ (λ t₁ t₂ → t₁ < t₂) p-helper (refl (ℕ2ℝ 5 + ℕ2ℝ 5)) h₇
 
---            where
---             p-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2)
---             p-helper = subst (λ w → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * w) (*-comm (ℕ2ℝ 2) (ℕ2ℝ 2 ⁻¹))
---                        (refl ((ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)))
+           where
+            p-helper : (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 ⁻¹ * ℕ2ℝ 2)
+            p-helper = subst (λ w → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) ≡ (ub + ℕ2ℝ 5) * w) (*-comm (ℕ2ℝ 2) (ℕ2ℝ 2 ⁻¹))
+                       (refl ((ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)))
 
---          p₂₅-helper : (ub + ℕ2ℝ 5) * r₁ < ℕ2ℝ 5 + ℕ2ℝ 5 → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5 + ℕ2ℝ 5
---          p₂₅-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) p-helper (refl (ℕ2ℝ 5 + ℕ2ℝ 5))
+         p₂₅-helper : (ub + ℕ2ℝ 5) * r₁ < ℕ2ℝ 5 + ℕ2ℝ 5 → (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹) < ℕ2ℝ 5 + ℕ2ℝ 5
+         p₂₅-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) p-helper (refl (ℕ2ℝ 5 + ℕ2ℝ 5))
 
---            where
---             p-helper : (ub + ℕ2ℝ 5) * r₁ ≡ (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)
---             p-helper = subst (λ w → (ub + ℕ2ℝ 5) * r₁ ≡ (ub + ℕ2ℝ 5) * w) (≡-sym (*-inve (ℕ2ℝ 2) (>→≢ (>-trans 2>1 1>0))))
---                        (refl ((ub + ℕ2ℝ 5) * r₁))
+           where
+            p-helper : (ub + ℕ2ℝ 5) * r₁ ≡ (ub + ℕ2ℝ 5) * (ℕ2ℝ 2 * ℕ2ℝ 2 ⁻¹)
+            p-helper = subst (λ w → (ub + ℕ2ℝ 5) * r₁ ≡ (ub + ℕ2ℝ 5) * w) (≡-sym (*-inve (ℕ2ℝ 2) (>→≢ (>-trans 2>1 1>0))))
+                       (refl ((ub + ℕ2ℝ 5) * r₁))
 
---          p₂₆-helper : ub + ℕ2ℝ 5 < ℕ2ℝ 5 + ℕ2ℝ 5 → (ub + ℕ2ℝ 5) * r₁ < ℕ2ℝ 5 + ℕ2ℝ 5
---          p₂₆-helper h₈ = subst₂ (λ t₁ t₂ → t₁ < t₂) p-helper (refl (ℕ2ℝ 5 + ℕ2ℝ 5)) h₈
+         p₂₆-helper : ub + ℕ2ℝ 5 < ℕ2ℝ 5 + ℕ2ℝ 5 → (ub + ℕ2ℝ 5) * r₁ < ℕ2ℝ 5 + ℕ2ℝ 5
+         p₂₆-helper h₈ = subst₂ (λ t₁ t₂ → t₁ < t₂) p-helper (refl (ℕ2ℝ 5 + ℕ2ℝ 5)) h₈
 
---            where
---             p-helper : ub + ℕ2ℝ 5 ≡ (ub + ℕ2ℝ 5) * r₁
---             p-helper = subst (λ w → ub + ℕ2ℝ 5 ≡ w) (≡-sym (*-neut (ub + ℕ2ℝ 5))) (refl (ub + ℕ2ℝ 5))
+           where
+            p-helper : ub + ℕ2ℝ 5 ≡ (ub + ℕ2ℝ 5) * r₁
+            p-helper = subst (λ w → ub + ℕ2ℝ 5 ≡ w) (≡-sym (*-neut (ub + ℕ2ℝ 5))) (refl (ub + ℕ2ℝ 5))
 
--- LbB5 : ∃ᵣ (λ x → Lub B (ℕ2ℝ 5))
--- LbB5 = exist (ℕ2ℝ 5) (UBB5 , UBB5≤ub)
+LbB5 : ∃ᵣ (λ x → Lub B (ℕ2ℝ 5))
+LbB5 = exist (ℕ2ℝ 5) (UBB5 , UBB5≤ub)
 
 -------------------------------------------------------------------------
 
