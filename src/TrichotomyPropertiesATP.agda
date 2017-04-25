@@ -1,7 +1,8 @@
+
 module TrichotomyPropertiesATP where
 
-open import Axioms
-open import Logic
+open import RealNumbersAxioms
+open import LogicDefinitions
 
 postulate >∨<→≢ : (x y : ℝ) → (x > y) ∨ (x < y) → ¬ (x ≡ y)
 {-# ATP prove >∨<→≢ #-}

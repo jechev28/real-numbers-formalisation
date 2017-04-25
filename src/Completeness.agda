@@ -1,25 +1,13 @@
+
 module Completeness where
 
-open import Axioms
+open import RealNumbersAxioms
 open import EqReasoning
 open import EqProperties
-open import Logic
-open import PoProperties
+open import LogicDefinitions
+open import LogicProperties
 open import Properties
 open import Nat
-
-dichotomy : (x y : ℝ) → (x > y) ∨ (x ≡ y) ∨ (x < y)
-dichotomy x y = case prf1 (case prf2 prf3) (trichotomy x y)
-
-  where
-   prf1 : x > y ∧ ¬ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
-   prf1 (x>y , h) = inj₁ x>y
-
-   prf2 : ¬ x > y ∧ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
-   prf2 (x≯y , x=y , x≮y) = ∨-comm (∨-assoc₁ (inj₁ x=y))
-
-   prf3 : ¬ x > y ∧ ¬ x ≡ y ∧ x < y → x > y ∨ x ≡ y ∨ x < y
-   prf3 (x≯y , x≠y , x<y) = ∨-assoc₂ (inj₂ x<y)
 
 -- Example 1.
 
@@ -69,7 +57,7 @@ bar1 : Bound B
 bar1 = exist (ℕ2ℝ 5) UBB5
 
 UBB5≤ub : (ub : ℝ) → UpperBound B ub → (ℕ2ℝ 5) ≤ ub
-UBB5≤ub ub Bub = case prf1 (case prf2 prf3) ((dichotomy ub (ℕ2ℝ 5)) )
+UBB5≤ub ub Bub = case prf1 (case prf2 prf3) ((weakTrichotomy ub (ℕ2ℝ 5)) )
 
   where
    prf1 : ub > ℕ2ℝ 5 → ℕ2ℝ 5 < ub ∨ ℕ2ℝ 5 ≡ ub

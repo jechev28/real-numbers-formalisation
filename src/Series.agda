@@ -1,10 +1,11 @@
+
 module Series where
 
-open import Axioms
+open import RealNumbersAxioms
 open import EqReasoning
 open import EqProperties
 open import Properties
-open import Logic
+open import LogicDefinitions
 open import Nat
 open import Exp
 

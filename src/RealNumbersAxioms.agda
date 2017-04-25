@@ -1,6 +1,9 @@
-module Axioms where
 
-open import Logic
+-- Axioms for the real number system.
+
+module RealNumbersAxioms where
+
+open import LogicDefinitions
 open import Nat
 
 -- Basics constants.

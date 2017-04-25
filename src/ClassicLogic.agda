@@ -1,6 +1,6 @@
 module ClassicLogic where
 
-open import Logic
+open import LogicDefinitions
 
 -- The principle of the excluded middle.
 postulate pem : ∀ {A} → A ∨ ¬ A

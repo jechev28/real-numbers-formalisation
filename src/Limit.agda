@@ -1,12 +1,13 @@
+
 module Limit where
 
-open import AbsoluteValue
-open import Axioms
+open import AbsoluteValueDefinition
+open import RealNumbersAxioms
 open import Distance
 open import EqReasoning
 open import EqProperties
 open import Exp
-open import Logic
+open import LogicDefinitions
 open import Min
 open import Nat
 open import Properties

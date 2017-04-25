@@ -1,29 +1,16 @@
+
 module Properties where
 
-open import Axioms
+open import RealNumbersAxioms
 open import DemorganLaws
 open import EqProperties
 open import EqReasoning
-open import Logic
+open import LogicDefinitions
+open import LogicProperties
 open import Nat
 
-≡-<→< : {x y z : ℝ} → x ≡ y → y < z → x < z
-≡-<→< (refl x) y<z = y<z
-
-<-=-→-< : {x y z : ℝ} → x < y → y ≡ z → x < z
-<-=-→-< x<y (refl y) = x<y
-
-≡->→> : {x y z : ℝ} → x ≡ y → y > z → x > z
-≡->→> (refl x) y>z = y>z
-
->-≡→>-1 : {x y z : ℝ} → x > z → x ≡ y → y > z
->-≡→>-1 x>z (refl x) = x>z
-
->-≡→>-2 : {x y z : ℝ} → x > y → y ≡ z → x > z
->-≡→>-2 x>y (refl x) = x>y
-
-<-≡→< : {x y z : ℝ} → x < y → y ≡ z → x < z
-<-≡→< x<y (refl x₁) = x<y
+------------------------------------------------------------------------------
+-- Some field properties
 
 ≡-+-cong-r : {x y z : ℝ} → x ≡ y → x + z ≡ y + z
 ≡-+-cong-r {x} {y} {z} h =
@@ -44,6 +31,428 @@ open import Nat
 ≡-*-cong-l {x} {y} z h =
   z * x ≡⟨ subst (λ w → (z * x) ≡ z * w) h (refl (z * x)) ⟩
   z * y ∎
+
+≡-+-cancel-r : {x y z : ℝ} → x + z ≡ y + z → x ≡ y
+≡-+-cancel-r {x} {y} {z} h =
+  x               ≡⟨ ≡-sym (+-neut x) ⟩
+  x + r₀          ≡⟨ subst (λ w → (x + r₀) ≡ (x + w)) (≡-sym (+-inve z)) (refl (x + r₀)) ⟩
+  x + (z + (- z)) ≡⟨ ≡-sym (+-asso x z (- z)) ⟩
+  (x + z) + (- z) ≡⟨ subst (λ w → (x + z) + (- z) ≡ w + (- z)) h (refl (x + z + - z)) ⟩
+  (y + z) + (- z) ≡⟨ +-asso y z (- z) ⟩
+  y + (z + (- z)) ≡⟨ subst (λ w → y + (z + (- z)) ≡ y + w) (+-inve z) (refl (y + (z + - z))) ⟩
+  y + r₀          ≡⟨ +-neut y ⟩
+  y               ∎
+
+≡-*-cancel-r : {x y z : ℝ} → z ≢ r₀ → x * z ≡ y * z → x ≡ y
+≡-*-cancel-r {x} {y} {z} h₁ h₂ =
+  x              ≡⟨ ≡-sym (*-neut x) ⟩
+  x * r₁         ≡⟨ subst (λ w → (x * r₁) ≡ (x * w)) (≡-sym (*-inve z h₁)) (refl (x * r₁)) ⟩
+  x * (z * z ⁻¹) ≡⟨ ≡-sym (*-asso x z (z ⁻¹))  ⟩
+  (x * z) * z ⁻¹ ≡⟨ subst (λ w → (x * z) * z ⁻¹ ≡ w * z ⁻¹) h₂ (refl (x * z * z ⁻¹)) ⟩
+  (y * z) * z ⁻¹ ≡⟨ *-asso y z (z ⁻¹) ⟩
+  y * (z * z ⁻¹) ≡⟨ subst (λ w → (y * (z * z ⁻¹)) ≡ (y * w)) (*-inve z h₁) (refl (y * (z * z ⁻¹))) ⟩
+  y * r₁         ≡⟨ *-neut y ⟩
+  y              ∎
+
+─-neut : {x : ℝ} → r₀ - x ≡ - x
+─-neut {x} =
+   r₀ - x    ≡⟨ +-comm r₀ (- x) ⟩
+   - x + r₀  ≡⟨ +-neut (- x) ⟩
+   - x       ∎
+
+*-right-zero : {x : ℝ} → x * r₀ ≡ r₀
+*-right-zero {x} =
+  x * r₀
+    ≡⟨ ≡-sym (+-neut (x * r₀)) ⟩
+  (x * r₀) + r₀
+    ≡⟨ subst (λ w → x * r₀ + r₀ ≡ x * r₀ + w) (≡-sym (+-inve (x * r₀))) (refl (x * r₀ + r₀)) ⟩
+  (x * r₀) + ((x * r₀) + (- (x * r₀)))
+    ≡⟨ ≡-sym (+-asso (x * r₀) (x * r₀) (- (x * r₀))) ⟩
+  ((x * r₀) + (x * r₀)) + (- (x * r₀))
+    ≡⟨ subst (λ w → x * r₀ + x * r₀ + - (x * r₀) ≡ w + - (x * r₀)) p-helper (refl (x * r₀ + x * r₀ + - (x * r₀))) ⟩
+  ((x * r₀) + r₀) + (- (x * r₀))
+    ≡⟨ subst (λ w → x * r₀ + r₀ + - (x * r₀) ≡ w + - (x * r₀)) (+-neut (x * r₀)) (refl (x * r₀ + r₀ + - (x * r₀))) ⟩
+  (x * r₀) + (- (x * r₀))
+    ≡⟨ +-inve (x * r₀) ⟩
+  r₀ ∎
+
+  where
+    p-helper : {x : ℝ} → x * r₀ + x * r₀ ≡ x * r₀ + r₀
+    p-helper {x} =
+      x * r₀ + x * r₀ ≡⟨ ≡-sym (*-dist x r₀ r₀) ⟩
+      x * (r₀ + r₀)   ≡⟨ subst (λ w → x * (r₀ + r₀) ≡ x * w) (+-neut r₀) (refl (x * (r₀ + r₀))) ⟩
+      x * r₀          ≡⟨ ≡-sym (+-neut (x * r₀)) ⟩
+      x * r₀ + r₀     ∎
+
+*-negation : {x : ℝ} → - x ≡ (- r₁) * x
+*-negation {x} =
+  - x
+    ≡⟨ ≡-sym (+-neut (- x)) ⟩
+  (- x) + r₀
+    ≡⟨ subst (λ w → (- x) + r₀ ≡ - x + w) (≡-sym p-helper) (refl (- x + r₀)) ⟩
+  (- x) + ((- r₁) * x + x)
+    ≡⟨ subst (λ w → (- x) + ((- r₁) * x + x) ≡ - x + w) (+-comm ((- r₁) * x) x) (refl (- x + (- r₁ * x + x))) ⟩
+  (- x) + (x + (- r₁) * x)
+    ≡⟨ ≡-sym (+-asso (- x) x (- r₁ * x)) ⟩
+  ((- x) + x) + (- r₁) * x
+    ≡⟨ subst (λ w → - x + x + (- r₁) * x ≡ w + - r₁ * x) (+-comm (- x) x) (refl (- x + x + - r₁ * x)) ⟩
+  (x + (- x)) + (- r₁) * x
+    ≡⟨ subst (λ w → x + (- x) + (- r₁) * x ≡ w + (- r₁) * x) (+-inve x) (refl (x + - x + - r₁ * x)) ⟩
+  r₀ + (- r₁) * x
+    ≡⟨ +-comm r₀ ((- r₁) * x) ⟩
+  (- r₁) * x + r₀
+    ≡⟨ +-neut ((- r₁) * x) ⟩
+  (- r₁) * x ∎
+
+  where
+    p-helper : {x : ℝ} → (- r₁) * x + x ≡ r₀
+    p-helper {x} =
+      (- r₁) * x + x
+      ≡⟨ subst (λ w → - r₁ * x + x ≡ w + x) (*-comm (- r₁) x) (refl (- r₁ * x + x)) ⟩
+      x * (- r₁) + x
+      ≡⟨ subst (λ w → x * (- r₁) + x ≡ x * (- r₁) + w) (≡-sym (*-neut x)) (refl (x * - r₁ + x)) ⟩
+      x * (- r₁) + x * r₁
+      ≡⟨ ≡-sym (*-dist x (- r₁) r₁) ⟩
+      x * ((- r₁) + r₁)
+      ≡⟨ subst (λ w → x * (- r₁ + r₁) ≡ x * w) (+-comm (- r₁) r₁) (refl (x * (- r₁ + r₁))) ⟩
+      x * (r₁ + (- r₁))
+      ≡⟨ subst (λ w → x * (r₁ + - r₁) ≡ x * w) (+-inve r₁) (refl (x * (r₁ + - r₁))) ⟩
+      x * r₀
+      ≡⟨ *-right-zero ⟩
+      r₀ ∎
+
+-- Laws of the signs in multiplication.
+
+mul-xy : {x y : ℝ} → (- x) * y ≡ - (x * y)
+mul-xy {x} {y} =
+  (- x) * y        ≡⟨ subst (λ w → (- x) * y ≡ w * y) *-negation (refl ((- x) * y)) ⟩
+  ((- r₁) * x) * y ≡⟨ *-asso (- r₁) x y ⟩
+  (- r₁) * (x * y) ≡⟨ ≡-sym *-negation ⟩
+  - (x * y)        ∎
+
+mulx-y : {x y : ℝ} → x * (- y) ≡ - (x * y)
+mulx-y {x} {y} =
+   x * (- y)  ≡⟨ *-comm x (- y) ⟩
+   (- y ) * x ≡⟨ mul-xy ⟩
+   - (y * x)  ≡⟨ subst (λ w → - (y * x) ≡ - w) (*-comm y x) (refl (- (y * x))) ⟩
+   - (x * y)  ∎
+
+mul--x : {x : ℝ} → - (- x) ≡ x
+mul--x {x} =
+  - (- x)
+    ≡⟨ ≡-sym (+-neut (- (- x))) ⟩
+  - (- x) + r₀
+    ≡⟨ +-comm (- (- x)) r₀ ⟩
+  r₀ + (- (- x))
+    ≡⟨ subst (λ w → r₀ + (- (- x)) ≡ w + (- (- x))) (≡-sym (+-inve x)) (refl (r₀ + - (- x))) ⟩
+  (x + (- x)) + (- (- x))
+    ≡⟨ +-asso x (- x) (- (- x)) ⟩
+  x + ((- x) + (- (- x)))
+    ≡⟨ subst (λ w → x + ((- x) + (- (- x))) ≡ x + w) (+-inve (- x)) (refl (x + (- x + - (- x)))) ⟩
+  x + r₀ ≡⟨ +-neut x ⟩
+  x ∎
+
+mul-x+y : ∀ {x y} → - (x + y) ≡ - x + (- y)
+mul-x+y {x} {y} =
+  - (x + y)        ≡⟨ *-negation ⟩
+  (- r₁) * (x + y) ≡⟨ *-dist (- r₁) x y ⟩
+  (- r₁) * x + (- r₁) * y
+    ≡⟨ subst (λ w → ((- r₁) * x + (- r₁) * y) ≡ (w + (- r₁) * y)) ( ≡-sym *-negation ) (refl (- r₁ * x + - r₁ * y)) ⟩
+  - x + (- r₁) * y ≡⟨ subst (λ w → (- x + (- r₁) * y) ≡ (- x + w)) (≡-sym *-negation) (refl (- x + - r₁ * y)) ⟩
+  - x + (- y)      ∎
+
+mul-x-y : {x y : ℝ} → (- x) * (- y) ≡ x * y
+mul-x-y {x} {y} =
+  (- x) * (- y) ≡⟨ mul-xy ⟩
+  - (x * (- y)) ≡⟨ subst (λ w → - (x * - y) ≡ - w) (*-comm x (- y)) (refl (- (x * - y))) ⟩
+  - ((- y) * x) ≡⟨ subst (λ w → - (- y * x) ≡ - w) mul-xy (refl (- (- y * x))) ⟩
+  - (- (y * x)) ≡⟨ mul--x ⟩
+  y * x         ≡⟨ *-comm y x ⟩
+  x * y         ∎
+
+------------------------------------------------------------------------------
+
+*-dist-minus : (x y z : ℝ) → x * (y - z) ≡ x * y - x * z
+*-dist-minus x y z =
+      x * (y - z)   ≡⟨ *-dist x y (- z) ⟩
+      x * y + x * (- z)   ≡⟨ subst (λ w → x * y + x * (- z) ≡ x * y + x * w) *-negation (refl (x * y + x * (- z))) ⟩
+      x * y + x * ((- r₁) * z)   ≡⟨ subst (λ w → x * y + x * ((- r₁) * z) ≡ x * y + w) (≡-sym (*-asso x (- r₁) z))
+                                          (refl (x * y + x * ((- r₁) * z))) ⟩
+      x * y + (x * (- r₁)) * z   ≡⟨ subst (λ w → x * y + (x * (- r₁)) * z ≡ x * y + w * z) (*-comm x (- r₁))
+                                          (refl (x * y + (x * (- r₁)) * z)) ⟩
+      x * y + ((- r₁) * x) * z   ≡⟨ subst (λ w → x * y + ((- r₁) * x) * z ≡ x * y + w * z) (≡-sym *-negation)
+                                          (refl (x * y + ((- r₁) * x) * z)) ⟩
+      x * y + (- x) * z   ≡⟨ subst (λ w → x * y + (- x) * z ≡ x * y + w) mul-xy (refl (x * y + (- x) * z)) ⟩
+      x * y - x * z ∎
+
+*-left-zero : {x : ℝ} → r₀ * x ≡ r₀
+*-left-zero {x} =
+  r₀ * x ≡⟨ *-comm r₀ x ⟩
+  x * r₀ ≡⟨ *-right-zero ⟩
+  r₀     ∎
+
+*-≢-zero : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x * y) ≢ r₀
+*-≢-zero {x} {y} x≢0 y≢0 h = p₁-helper p₂-helper
+
+ where
+  p₁-helper : (x ≡ r₀) ∨ (y ≡ r₀) → ⊥
+  p₁-helper h₁ = case prf₁ prf₂ h₁
+
+    where
+     prf₁ : x ≡ r₀ → ⊥
+     prf₁ x≡0 = x≢0 x≡0
+
+     prf₂ : y ≡ r₀ → ⊥
+     prf₂ y≡0 = y≢0 y≡0
+
+  p₂-helper : (x ≡ r₀) ∨ (y ≡ r₀)
+  p₂-helper = inj₁ p₂₁-helper
+
+    where
+     p₂₁-helper : x ≡ r₀
+     p₂₁-helper =
+       x              ≡⟨ ≡-sym (*-neut x) ⟩
+       x * r₁         ≡⟨ subst (λ w → x * r₁ ≡ x * w) (≡-sym (*-inve y y≢0)) (refl (x * r₁)) ⟩
+       x * (y * y ⁻¹) ≡⟨ ≡-sym (*-asso x y (y ⁻¹)) ⟩
+       (x * y) * y ⁻¹ ≡⟨ subst (λ w → x * y * y ⁻¹ ≡ w * y ⁻¹) h (refl (x * y * y ⁻¹)) ⟩
+       r₀ * y ⁻¹      ≡⟨ *-left-zero ⟩
+       r₀             ∎
+
+*-∨-zero : {x y : ℝ} → (x ≡ r₀) ∨ (y ≡ r₀) → x * y ≡ r₀
+*-∨-zero {x} {y} h = case prf₁ prf₂ h
+
+  where
+   prf₁ : x ≡ r₀ → x * y ≡ r₀
+   prf₁ h =
+     x * y  ≡⟨ subst (λ w → x * y ≡ w * y) h (refl (x * y)) ⟩
+     r₀ * y ≡⟨ *-left-zero ⟩
+     r₀ ∎
+
+   prf₂ : y ≡ r₀ → x * y ≡ r₀
+   prf₂ h =
+     x * y ≡⟨ subst (λ w → x * y ≡ x * w) h (refl (x * y)) ⟩
+     x * r₀ ≡⟨ *-right-zero ⟩
+     r₀ ∎
+
+r₀-sqr : sqr r₀ ≡ r₀
+r₀-sqr = *-right-zero
+
+r₁-sqr : sqr r₁ ≡ r₁
+r₁-sqr = *-neut r₁
+
+2-1=1 : ℕ2ℝ 2 - r₁ ≡ r₁
+2-1=1 =
+  ℕ2ℝ 2 - r₁
+    ≡⟨ subst (λ w → r₁ + (r₁ + r₀) - r₁ ≡ r₁ + w - r₁) (+-neut r₁) (refl (r₁ + (r₁ + r₀) - r₁)) ⟩
+  r₁ + r₁ - r₁
+    ≡⟨ +-asso r₁ r₁ (- r₁) ⟩
+  r₁ + (r₁ - r₁)
+    ≡⟨ subst (λ w → r₁ + (r₁ - r₁) ≡ r₁ + w) (+-inve r₁) (refl (r₁ + (r₁ - r₁))) ⟩
+  r₁ + r₀
+    ≡⟨ +-neut r₁ ⟩
+  r₁ ∎
+
+x-y=0→x=y : (x y : ℝ) → x - y ≡ r₀ → x ≡ y
+x-y=0→x=y x y h =
+     x             ≡⟨ ≡-sym (+-neut x) ⟩
+     x + r₀        ≡⟨ subst (λ w → x + r₀ ≡ x + w) (≡-sym (+-inve y)) (refl (x + r₀)) ⟩
+     x + (y - y)   ≡⟨ subst (λ w → x + (y - y) ≡ x + w) (+-comm y (- y)) (refl (x + (y - y))) ⟩
+     x + (- y + y) ≡⟨ ≡-sym (+-asso x (- y) y) ⟩
+     (x - y) + y   ≡⟨ subst (λ w → (x - y) + y ≡ w + y) h (refl ((x - y) + y)) ⟩
+     r₀ + y        ≡⟨ +-comm r₀ y ⟩
+     y + r₀        ≡⟨ +-neut y ⟩
+     y      ∎
+
+2x=x+x : {x : ℝ} → (ℕ2ℝ 2) * x ≡ x + x
+2x=x+x {x} =
+  (ℕ2ℝ 2) * x     ≡⟨ subst (λ w → ℕ2ℝ 2 * x ≡ (r₁ + w) * x) (+-neut r₁) (refl (ℕ2ℝ 2 * x)) ⟩
+  (r₁ + r₁) * x   ≡⟨ subst (λ w → (r₁ + r₁) * x ≡ w) (*-comm (r₁ + r₁) x) (refl ((r₁ + r₁) * x)) ⟩
+  x * (r₁ + r₁)   ≡⟨ *-dist x r₁ r₁ ⟩
+  x * r₁ + x * r₁ ≡⟨ subst (λ w → x * r₁ + x * r₁ ≡ x * r₁ + w) (*-neut x) (refl (x * r₁ + x * r₁)) ⟩
+  x * r₁ + x      ≡⟨ subst (λ w → x * r₁ + x ≡ w + x) (*-neut x) (refl (x * r₁ + x)) ⟩
+  x + x ∎
+
+*-dist-r : (x y z : ℝ) → (y + z) * x ≡ y * x + z * x
+*-dist-r x y z =
+  (y + z) * x       ≡⟨ subst (λ w → ((y + z) * x) ≡ (w)) ( ≡-sym ( *-comm x (y + z) ) ) (refl ((y + z) * x)) ⟩
+  x * (y + z)       ≡⟨ *-dist x y z ⟩
+  (x * y) + (x * z) ≡⟨ subst (λ w → ((x * y) + (x * z)) ≡ (w + (x * z))) (*-comm x y) (refl (x * y + x * z)) ⟩
+  (y * x) + (x * z) ≡⟨ subst (λ w → ((y * x) + (x * z)) ≡ ((y * x) + w)) (*-comm x z) (refl (y * x + x * z)) ⟩
+  (y * x) + (z * x) ∎
+
+*-double-dist : (a b c d : ℝ) → (a + b) * (c + d) ≡ (a * c + a * d) + (b * c + b * d)
+*-double-dist a b c d =
+  (a + b) * (c + d)
+   ≡⟨ *-dist (a + b) c d ⟩
+  (a + b) * c + (a + b) * d
+   ≡⟨ subst (λ w → (a + b) * c + (a + b) * d ≡ w + (a + b) * d) (*-dist-r c a b) (refl ((a + b) * c + (a + b) * d)) ⟩
+  (a * c + b * c) + (a + b) * d
+   ≡⟨ subst (λ w → a * c + b * c + (a + b) * d ≡ a * c + b * c + w) (*-dist-r d a b) (refl (a * c + b * c + (a + b) * d)) ⟩
+  (a * c + b * c) + (a * d + b * d)
+   ≡⟨ +-asso (a * c) (b * c) (a * d + b * d) ⟩
+  a * c + (b * c + (a * d + b * d))
+   ≡⟨ subst (λ w → a * c + (b * c + (a * d + b * d)) ≡ a * c + w) (≡-sym (+-asso (b * c) (a * d) (b * d)))
+   (refl (a * c + (b * c + (a * d + b * d)))) ⟩
+  a * c + ((b * c + a * d) + b * d)
+   ≡⟨ subst (λ w → a * c + (b * c + a * d + b * d) ≡ a * c + (w + b * d)) (+-comm (b * c) (a * d))
+   (refl (a * c + (b * c + a * d + b * d))) ⟩
+  a * c + ((a * d + b * c) + b * d)
+   ≡⟨ subst (λ w → a * c + (a * d + b * c + b * d) ≡ a * c + w) (+-asso (a * d) (b * c) (b * d)) (refl (a * c + (a * d + b * c + b * d))) ⟩
+  a * c + (a * d + (b * c + b * d))
+   ≡⟨ ≡-sym (+-asso (a * c) (a * d) (b * c + b * d)) ⟩
+  (a * c + a * d) + (b * c + b * d) ∎
+
+-- Trinomial Perfect Square.
+
+TPS : (x y : ℝ) → sqr (x + y) ≡ sqr x + ℕ2ℝ 2 * (x * y) + sqr y
+TPS x y =
+  sqr (x + y)
+    ≡⟨ *-double-dist x y x y ⟩
+  sqr x + x * y + (y * x + sqr y)
+    ≡⟨ +-asso (sqr x) (x * y) (y * x + sqr y) ⟩
+  sqr x + (x * y + (y * x + sqr y))
+    ≡⟨ subst (λ w → sqr x + (x * y + (y * x + sqr y)) ≡ sqr x + w) (≡-sym (+-asso (x * y) (y * x) (sqr y)))
+    (refl (sqr x + (x * y + (y * x + sqr y)))) ⟩
+  sqr x + ((x * y + y * x) + sqr y)
+    ≡⟨ subst (λ w → sqr x + (x * y + y * x + sqr y) ≡ sqr x + (x * y + w + sqr y)) (*-comm y x)
+    (refl (sqr x + (x * y + y * x + sqr y))) ⟩
+  sqr x + ((x * y + x * y) + sqr y)
+    ≡⟨ subst (λ w → sqr x + (x * y + x * y + sqr y) ≡ sqr x + (w + sqr y)) (≡-sym 2x=x+x)
+    (refl (sqr x + (x * y + x * y + sqr y))) ⟩
+  sqr x + (ℕ2ℝ 2 * (x * y) + sqr y)
+    ≡⟨ ≡-sym (+-asso (sqr x) (ℕ2ℝ 2 * (x * y)) (sqr y)) ⟩
+  sqr x + ℕ2ℝ 2 * (x * y) + sqr y   ∎
+
+TPS1 : (x : ℝ) → sqr (x + r₁) ≡ sqr x + ℕ2ℝ 2 * x + r₁
+TPS1 x =
+  sqr (x + r₁)
+   ≡⟨ TPS x r₁ ⟩
+  sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁
+   ≡⟨ subst (λ w → sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁ ≡ sqr x + ℕ2ℝ 2 * w + sqr r₁) (*-neut x)
+   (refl (sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁)) ⟩
+  sqr x + ℕ2ℝ 2 * x + sqr r₁
+   ≡⟨ subst (λ w → sqr x + ℕ2ℝ 2 * x + sqr r₁ ≡ sqr x + ℕ2ℝ 2 * x + w) (*-neut r₁)
+   (refl (sqr x + ℕ2ℝ 2 * x + sqr r₁)) ⟩
+  sqr x + ℕ2ℝ 2 * x + r₁ ∎
+
+*-inve-product : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x * y) ≢ r₀ → (x * y) ⁻¹ ≡ x ⁻¹ * y ⁻¹
+*-inve-product {x} {y} h₁ h₂ h₃ =
+  (x * y) ⁻¹
+    ≡⟨ ≡-sym (*-neut ((x * y) ⁻¹)) ⟩
+  (x * y) ⁻¹ * r₁
+    ≡⟨ *-comm ((x * y) ⁻¹) r₁ ⟩
+  r₁ * (x * y) ⁻¹
+    ≡⟨ subst (λ w → r₁ * (x * y) ⁻¹ ≡ w * (x * y) ⁻¹) (≡-sym (p-helper h₁ h₂) ) (refl (r₁ * (x * y) ⁻¹)) ⟩
+  ((x ⁻¹ * y ⁻¹) * (x * y)) * (x * y) ⁻¹
+    ≡⟨ *-asso (x ⁻¹ * y ⁻¹) (x * y) ((x * y) ⁻¹) ⟩
+  (x ⁻¹ * y ⁻¹) * (x * y * (x * y) ⁻¹)
+    ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * ((x * y) * (x * y) ⁻¹) ≡ (x ⁻¹ * y ⁻¹) * w) (*-inve (x * y) h₃) (refl (x ⁻¹ * y ⁻¹ * (x * y * (x * y) ⁻¹))) ⟩
+  (x ⁻¹ * y ⁻¹) * r₁
+    ≡⟨ *-neut (x ⁻¹ * y ⁻¹) ⟩
+  x ⁻¹ * y ⁻¹ ∎
+
+  where
+    p-helper : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x ⁻¹ * y ⁻¹) * (x * y) ≡ r₁
+    p-helper {x} {y} h₁ h₂ =
+      (x ⁻¹ * y ⁻¹) * (x * y)
+        ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * (x * y) ≡ (x ⁻¹ * y ⁻¹) * w) (*-comm x y) (refl (x ⁻¹ * y ⁻¹ * (x * y))) ⟩
+      (x ⁻¹ * y ⁻¹) * (y * x)
+        ≡⟨ ≡-sym (*-asso (x ⁻¹ * y ⁻¹) y x) ⟩
+      ((x ⁻¹ * y ⁻¹) * y) * x
+        ≡⟨ subst (λ w → ((x ⁻¹ * y ⁻¹) * y) * x ≡ w * x) (*-asso (x ⁻¹) (y ⁻¹) y) (refl (x ⁻¹ * y ⁻¹ * y * x)) ⟩
+      (x ⁻¹ * (y ⁻¹ * y)) * x
+        ≡⟨ subst (λ w → (x ⁻¹ * (y ⁻¹ * y)) * x ≡ (x ⁻¹ * w) * x) (*-comm (y ⁻¹) y) (refl (x ⁻¹ * (y ⁻¹ * y) * x)) ⟩
+      (x ⁻¹ * (y * y ⁻¹)) * x
+        ≡⟨ subst (λ w → (x ⁻¹ * (y * y ⁻¹)) * x ≡ (x ⁻¹ * w) * x) (*-inve y h₂) (refl (x ⁻¹ * (y * y ⁻¹) * x)) ⟩
+      (x ⁻¹ * r₁) * x
+        ≡⟨ subst (λ w → (x ⁻¹ * r₁) * x ≡ w * x) (*-neut (x ⁻¹)) (refl (x ⁻¹ * r₁ * x)) ⟩
+      x ⁻¹ * x
+        ≡⟨ *-comm (x ⁻¹) x ⟩
+      x * x ⁻¹
+        ≡⟨ *-inve x h₁ ⟩
+      r₁ ∎
+
+-- Adding Heterogeneous Fractions.
+
++-fractional : {a b c d : ℝ} → b ≢ r₀ → d ≢ r₀ → a * b ⁻¹ + c * d ⁻¹ ≡ (a * d + b * c) * (b * d) ⁻¹
++-fractional {a} {b} {c} {d} b≠0 d≠0 = ≡-sym p-helper
+
+  where
+   p-helper : (a * d + b * c) * (b * d) ⁻¹ ≡ a * b ⁻¹ + c * d ⁻¹
+   p-helper =
+     (a * d + b * c) * (b * d) ⁻¹
+      ≡⟨ *-dist-r ((b * d) ⁻¹) (a * d) (b * c) ⟩
+     (a * d) * (b * d) ⁻¹ + b * c * (b * d) ⁻¹
+      ≡⟨ subst (λ w → (a * d) * (b * d) ⁻¹ + b * c * (b * d) ⁻¹ ≡ w + b * c * (b * d) ⁻¹) (*-asso a d ((b * d) ⁻¹))
+      (refl (a * d * (b * d) ⁻¹ + b * c * (b * d) ⁻¹)) ⟩
+     a * (d * (b * d) ⁻¹) + b * c * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * (d * (b * d) ⁻¹) + b * c * (b * d) ⁻¹ ≡ a * (d * w ⁻¹) + b * c * (b * d) ⁻¹) (*-comm b d)
+      (refl (a * (d * (b * d) ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
+     a * (d * (d * b) ⁻¹) + (b * c) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * (d * (d * b) ⁻¹) + b * c * (b * d) ⁻¹ ≡ a * (d * w) + b * c * (b * d) ⁻¹)
+      (*-inve-product d≠0 b≠0 (*-≢-zero d≠0 b≠0)) (refl (a * (d * (d * b) ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
+     a * (d * (d ⁻¹ * b ⁻¹)) + (b * c) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * (d * (d ⁻¹ * b ⁻¹)) + b * c * (b * d) ⁻¹ ≡ a * w + b * c * (b * d) ⁻¹)
+      (≡-sym (*-asso d (d ⁻¹) (b ⁻¹))) (refl (a * (d * (d ⁻¹ * b ⁻¹)) + (b * c) * (b * d) ⁻¹)) ⟩
+     a * ((d * d ⁻¹) * b ⁻¹) + (b * c) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * (d * d ⁻¹ * b ⁻¹) + (b * c) * (b * d) ⁻¹ ≡ a * (w * b ⁻¹) + b * c * (b * d) ⁻¹) (*-inve d d≠0)
+      (refl (a * (d * d ⁻¹ * b ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
+     a * (r₁ * b ⁻¹) + (b * c) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * (r₁ * b ⁻¹) + b * c * (b * d) ⁻¹ ≡ a * w + b * c * (b * d) ⁻¹) (*-comm r₁ (b ⁻¹))
+      (refl (a * (r₁ * b ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
+     a * (b ⁻¹ * r₁) + (b * c) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * (b ⁻¹ * r₁) + b * c * (b * d) ⁻¹ ≡ a * w + b * c * (b * d) ⁻¹) (*-neut (b ⁻¹))
+      (refl (a * (b ⁻¹ * r₁) + b * c * (b * d) ⁻¹)) ⟩
+     a * b ⁻¹ + (b * c) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * b ⁻¹ + b * c * (b * d) ⁻¹ ≡ a * b ⁻¹ + w * (b * d) ⁻¹) (*-comm b c)
+      (refl (a * b ⁻¹ + b * c * (b * d) ⁻¹)) ⟩
+     a * b ⁻¹ + (c * b) * (b * d) ⁻¹
+      ≡⟨ subst (λ w → a * b ⁻¹ + c * b * (b * d) ⁻¹ ≡ a * b ⁻¹ + w) (*-asso c b ((b * d) ⁻¹))
+      (refl (a * b ⁻¹ + c * b * (b * d) ⁻¹)) ⟩
+     a * b ⁻¹ + c * (b * (b * d) ⁻¹)
+      ≡⟨ subst (λ w → a * b ⁻¹ + c * (b * (b * d) ⁻¹) ≡ a * b ⁻¹ + c * (b * w)) (*-inve-product b≠0 d≠0 (*-≢-zero b≠0 d≠0))
+      (refl (a * b ⁻¹ + c * (b * (b * d) ⁻¹))) ⟩
+     a * b ⁻¹ + c * (b * (b ⁻¹ * d ⁻¹))
+      ≡⟨ subst (λ w → a * b ⁻¹ + c * (b * (b ⁻¹ * d ⁻¹)) ≡ a * b ⁻¹ + c * w) (≡-sym (*-asso b (b ⁻¹) (d ⁻¹)))
+      (refl (a * b ⁻¹ + c * (b * (b ⁻¹ * d ⁻¹)))) ⟩
+     a * b ⁻¹ + c * ((b * b ⁻¹) * d ⁻¹)
+      ≡⟨ subst (λ w → a * b ⁻¹ + c * (b * b ⁻¹ * d ⁻¹) ≡ a * b ⁻¹ + c * (w * d ⁻¹)) (*-inve b b≠0)
+      (refl (a * b ⁻¹ + c * (b * b ⁻¹ * d ⁻¹))) ⟩
+     a * b ⁻¹ + c * (r₁ * d ⁻¹)
+      ≡⟨ subst (λ w → a * b ⁻¹ + c * (r₁ * d ⁻¹) ≡ a * b ⁻¹ + c * w) (*-comm r₁ (d ⁻¹)) (refl (a * b ⁻¹ + c * (r₁ * d ⁻¹))) ⟩
+     a * b ⁻¹ + c * (d ⁻¹ * r₁)
+     ≡⟨ subst (λ w → a * b ⁻¹ + c * (d ⁻¹ * r₁) ≡ a * b ⁻¹ + c * w) (*-neut (d ⁻¹)) (refl (a * b ⁻¹ + c * (d ⁻¹ * r₁))) ⟩
+     a * b ⁻¹ + c * d ⁻¹   ∎
+
+-- One is equal to its multiplicative inverse.
+
+1≡1⁻¹ : r₁ ≡ r₁ ⁻¹
+1≡1⁻¹ =
+  r₁         ≡⟨ ≡-sym (*-inve r₁ 1≢0) ⟩
+  r₁ * r₁ ⁻¹ ≡⟨ *-comm r₁ (r₁ ⁻¹) ⟩
+  r₁ ⁻¹ * r₁ ≡⟨ *-neut (r₁ ⁻¹) ⟩
+  r₁ ⁻¹      ∎
+
+------------------------------------------------------------------------------
+-- Some ordered field properties
+
+≡-<→< : {x y z : ℝ} → x ≡ y → y < z → x < z
+≡-<→< (refl x) y<z = y<z
+
+<-≡-→-< : {x y z : ℝ} → x < y → y ≡ z → x < z
+<-≡-→-< x<y (refl y) = x<y
+
+≡->→> : {x y z : ℝ} → x ≡ y → y > z → x > z
+≡->→> (refl x) y>z = y>z
+
+>-≡→>-1 : {x y z : ℝ} → x > z → x ≡ y → y > z
+>-≡→>-1 x>z (refl x) = x>z
+
+>-≡→>-2 : {x y z : ℝ} → x > y → y ≡ z → x > z
+>-≡→>-2 x>y (refl x) = x>y
+
+<-≡→< : {x y z : ℝ} → x < y → y ≡ z → x < z
+<-≡→< x<y (refl x₁) = x<y
 
 >-+-right : {x y z : ℝ} → x > y → x + z > y + z
 >-+-right {x} {y} {z} x>y = p-helper x>y (>-+-left x>y)
@@ -78,28 +487,6 @@ open import Nat
    p₂-helper : x ≡ y → y < x ∨ y ≡ x
    p₂-helper x≡y = inj₂ (≡-sym x≡y)
 
-≡-+-cancel-r : {x y z : ℝ} → x + z ≡ y + z → x ≡ y
-≡-+-cancel-r {x} {y} {z} h =
-  x               ≡⟨ ≡-sym (+-neut x) ⟩
-  x + r₀          ≡⟨ subst (λ w → (x + r₀) ≡ (x + w)) (≡-sym (+-inve z)) (refl (x + r₀)) ⟩
-  x + (z + (- z)) ≡⟨ ≡-sym (+-asso x z (- z)) ⟩
-  (x + z) + (- z) ≡⟨ subst (λ w → (x + z) + (- z) ≡ w + (- z)) h (refl (x + z + - z)) ⟩
-  (y + z) + (- z) ≡⟨ +-asso y z (- z) ⟩
-  y + (z + (- z)) ≡⟨ subst (λ w → y + (z + (- z)) ≡ y + w) (+-inve z) (refl (y + (z + - z))) ⟩
-  y + r₀          ≡⟨ +-neut y ⟩
-  y               ∎
-
-≡-*-cancel-r : {x y z : ℝ} → z ≢ r₀ → x * z ≡ y * z → x ≡ y
-≡-*-cancel-r {x} {y} {z} h₁ h₂ =
-  x              ≡⟨ ≡-sym (*-neut x) ⟩
-  x * r₁         ≡⟨ subst (λ w → (x * r₁) ≡ (x * w)) (≡-sym (*-inve z h₁)) (refl (x * r₁)) ⟩
-  x * (z * z ⁻¹) ≡⟨ ≡-sym (*-asso x z (z ⁻¹))  ⟩
-  (x * z) * z ⁻¹ ≡⟨ subst (λ w → (x * z) * z ⁻¹ ≡ w * z ⁻¹) h₂ (refl (x * z * z ⁻¹)) ⟩
-  (y * z) * z ⁻¹ ≡⟨ *-asso y z (z ⁻¹) ⟩
-  y * (z * z ⁻¹) ≡⟨ subst (λ w → (y * (z * z ⁻¹)) ≡ (y * w)) (*-inve z h₁) (refl (y * (z * z ⁻¹))) ⟩
-  y * r₁         ≡⟨ *-neut y ⟩
-  y              ∎
-
 >-+-cancel-r : {x y z : ℝ} → x + z > y + z → x > y
 >-+-cancel-r h = p₁-helper (p₂-helper (p₃-helper (p₄-helper h)))
 
@@ -120,36 +507,6 @@ open import Nat
     p₄-helper : {x y z : ℝ} → x + z > y + z → x + z + (- z) > y + z + (- z)
     p₄-helper {x} {y} {z} h = >-+-right h
 
-─-neut : {x : ℝ} → r₀ - x ≡ - x
-─-neut {x} =
-   r₀ - x    ≡⟨ +-comm r₀ (- x) ⟩
-   - x + r₀  ≡⟨ +-neut (- x) ⟩
-   - x       ∎
-
-*-right-zero : {x : ℝ} → x * r₀ ≡ r₀
-*-right-zero {x} =
-  x * r₀
-    ≡⟨ ≡-sym (+-neut (x * r₀)) ⟩
-  (x * r₀) + r₀
-    ≡⟨ subst (λ w → x * r₀ + r₀ ≡ x * r₀ + w) (≡-sym (+-inve (x * r₀))) (refl (x * r₀ + r₀)) ⟩
-  (x * r₀) + ((x * r₀) + (- (x * r₀)))
-    ≡⟨ ≡-sym (+-asso (x * r₀) (x * r₀) (- (x * r₀))) ⟩
-  ((x * r₀) + (x * r₀)) + (- (x * r₀))
-    ≡⟨ subst (λ w → x * r₀ + x * r₀ + - (x * r₀) ≡ w + - (x * r₀)) p-helper (refl (x * r₀ + x * r₀ + - (x * r₀))) ⟩
-  ((x * r₀) + r₀) + (- (x * r₀))
-    ≡⟨ subst (λ w → x * r₀ + r₀ + - (x * r₀) ≡ w + - (x * r₀)) (+-neut (x * r₀)) (refl (x * r₀ + r₀ + - (x * r₀))) ⟩
-  (x * r₀) + (- (x * r₀))
-    ≡⟨ +-inve (x * r₀) ⟩
-  r₀ ∎
-
-  where
-    p-helper : {x : ℝ} → x * r₀ + x * r₀ ≡ x * r₀ + r₀
-    p-helper {x} =
-      x * r₀ + x * r₀ ≡⟨ ≡-sym (*-dist x r₀ r₀) ⟩
-      x * (r₀ + r₀)   ≡⟨ subst (λ w → x * (r₀ + r₀) ≡ x * w) (+-neut r₀) (refl (x * (r₀ + r₀))) ⟩
-      x * r₀          ≡⟨ ≡-sym (+-neut (x * r₀)) ⟩
-      x * r₀ + r₀     ∎
-
 <-to-minus : {x y : ℝ} → y < x → x - y > r₀
 <-to-minus {x} {y} y<x = >-+-cancel-r (p₁-helper (>-+-right y<x))
 
@@ -164,6 +521,7 @@ open import Nat
        x + (y - y) ≡⟨ subst (λ w → x + (y - y) ≡ x + w) (+-comm y (- y)) (refl (x + (y - y))) ⟩
        x + (- y + y) ≡⟨ ≡-sym (+-asso x (- y) y) ⟩
        x - y + y  ∎
+
 minus-to-< : {x y : ℝ} → x - y > r₀ → y < x
 minus-to-< {x} {y} h = >-to-< (p₁-helper (p₂-helper (p₃-helper (>-+-right h))))
 
@@ -282,104 +640,6 @@ x>0→-x<0 {x} x>r₀ = subst₂ (λ t₁ t₂ → t₁ > t₂) (refl r₀) ─-
         - x + r₀ ≡⟨ +-comm (- x) r₀ ⟩
         r₀ - x   ∎
 
-*-negation : {x : ℝ} → - x ≡ (- r₁) * x
-*-negation {x} =
-  - x
-    ≡⟨ ≡-sym (+-neut (- x)) ⟩
-  (- x) + r₀
-    ≡⟨ subst (λ w → (- x) + r₀ ≡ - x + w) (≡-sym p-helper) (refl (- x + r₀)) ⟩
-  (- x) + ((- r₁) * x + x)
-    ≡⟨ subst (λ w → (- x) + ((- r₁) * x + x) ≡ - x + w) (+-comm ((- r₁) * x) x) (refl (- x + (- r₁ * x + x))) ⟩
-  (- x) + (x + (- r₁) * x)
-    ≡⟨ ≡-sym (+-asso (- x) x (- r₁ * x)) ⟩
-  ((- x) + x) + (- r₁) * x
-    ≡⟨ subst (λ w → - x + x + (- r₁) * x ≡ w + - r₁ * x) (+-comm (- x) x) (refl (- x + x + - r₁ * x)) ⟩
-  (x + (- x)) + (- r₁) * x
-    ≡⟨ subst (λ w → x + (- x) + (- r₁) * x ≡ w + (- r₁) * x) (+-inve x) (refl (x + - x + - r₁ * x)) ⟩
-  r₀ + (- r₁) * x
-    ≡⟨ +-comm r₀ ((- r₁) * x) ⟩
-  (- r₁) * x + r₀
-    ≡⟨ +-neut ((- r₁) * x) ⟩
-  (- r₁) * x ∎
-
-  where
-    p-helper : {x : ℝ} → (- r₁) * x + x ≡ r₀
-    p-helper {x} =
-      (- r₁) * x + x
-      ≡⟨ subst (λ w → - r₁ * x + x ≡ w + x) (*-comm (- r₁) x) (refl (- r₁ * x + x)) ⟩
-      x * (- r₁) + x
-      ≡⟨ subst (λ w → x * (- r₁) + x ≡ x * (- r₁) + w) (≡-sym (*-neut x)) (refl (x * - r₁ + x)) ⟩
-      x * (- r₁) + x * r₁
-      ≡⟨ ≡-sym (*-dist x (- r₁) r₁) ⟩
-      x * ((- r₁) + r₁)
-      ≡⟨ subst (λ w → x * (- r₁ + r₁) ≡ x * w) (+-comm (- r₁) r₁) (refl (x * (- r₁ + r₁))) ⟩
-      x * (r₁ + (- r₁))
-      ≡⟨ subst (λ w → x * (r₁ + - r₁) ≡ x * w) (+-inve r₁) (refl (x * (r₁ + - r₁))) ⟩
-      x * r₀
-      ≡⟨ *-right-zero ⟩
-      r₀ ∎
-
--- Laws of the signs in multiplication.
-
-mul-xy : {x y : ℝ} → (- x) * y ≡ - (x * y)
-mul-xy {x} {y} =
-  (- x) * y        ≡⟨ subst (λ w → (- x) * y ≡ w * y) *-negation (refl ((- x) * y)) ⟩
-  ((- r₁) * x) * y ≡⟨ *-asso (- r₁) x y ⟩
-  (- r₁) * (x * y) ≡⟨ ≡-sym *-negation ⟩
-  - (x * y)        ∎
-
-mulx-y : {x y : ℝ} → x * (- y) ≡ - (x * y)
-mulx-y {x} {y} =
-   x * (- y)  ≡⟨ *-comm x (- y) ⟩
-   (- y ) * x ≡⟨ mul-xy ⟩
-   - (y * x)  ≡⟨ subst (λ w → - (y * x) ≡ - w) (*-comm y x) (refl (- (y * x))) ⟩
-   - (x * y)  ∎
-
-mul--x : {x : ℝ} → - (- x) ≡ x
-mul--x {x} =
-  - (- x)
-    ≡⟨ ≡-sym (+-neut (- (- x))) ⟩
-  - (- x) + r₀
-    ≡⟨ +-comm (- (- x)) r₀ ⟩
-  r₀ + (- (- x))
-    ≡⟨ subst (λ w → r₀ + (- (- x)) ≡ w + (- (- x))) (≡-sym (+-inve x)) (refl (r₀ + - (- x))) ⟩
-  (x + (- x)) + (- (- x))
-    ≡⟨ +-asso x (- x) (- (- x)) ⟩
-  x + ((- x) + (- (- x)))
-    ≡⟨ subst (λ w → x + ((- x) + (- (- x))) ≡ x + w) (+-inve (- x)) (refl (x + (- x + - (- x)))) ⟩
-  x + r₀ ≡⟨ +-neut x ⟩
-  x ∎
-
-mul-x+y : ∀ {x y} → - (x + y) ≡ - x + (- y)
-mul-x+y {x} {y} =
-  - (x + y)        ≡⟨ *-negation ⟩
-  (- r₁) * (x + y) ≡⟨ *-dist (- r₁) x y ⟩
-  (- r₁) * x + (- r₁) * y
-    ≡⟨ subst (λ w → ((- r₁) * x + (- r₁) * y) ≡ (w + (- r₁) * y)) ( ≡-sym *-negation ) (refl (- r₁ * x + - r₁ * y)) ⟩
-  - x + (- r₁) * y ≡⟨ subst (λ w → (- x + (- r₁) * y) ≡ (- x + w)) (≡-sym *-negation) (refl (- x + - r₁ * y)) ⟩
-  - x + (- y)      ∎
-
-mul-x-y : {x y : ℝ} → (- x) * (- y) ≡ x * y
-mul-x-y {x} {y} =
-  (- x) * (- y) ≡⟨ mul-xy ⟩
-  - (x * (- y)) ≡⟨ subst (λ w → - (x * - y) ≡ - w) (*-comm x (- y)) (refl (- (x * - y))) ⟩
-  - ((- y) * x) ≡⟨ subst (λ w → - (- y * x) ≡ - w) mul-xy (refl (- (- y * x))) ⟩
-  - (- (y * x)) ≡⟨ mul--x ⟩
-  y * x         ≡⟨ *-comm y x ⟩
-  x * y         ∎
-
-*-dist-minus : (x y z : ℝ) → x * (y - z) ≡ x * y - x * z
-*-dist-minus x y z =
-      x * (y - z)   ≡⟨ *-dist x y (- z) ⟩
-      x * y + x * (- z)   ≡⟨ subst (λ w → x * y + x * (- z) ≡ x * y + x * w) *-negation (refl (x * y + x * (- z))) ⟩
-      x * y + x * ((- r₁) * z)   ≡⟨ subst (λ w → x * y + x * ((- r₁) * z) ≡ x * y + w) (≡-sym (*-asso x (- r₁) z))
-                                          (refl (x * y + x * ((- r₁) * z))) ⟩
-      x * y + (x * (- r₁)) * z   ≡⟨ subst (λ w → x * y + (x * (- r₁)) * z ≡ x * y + w * z) (*-comm x (- r₁))
-                                          (refl (x * y + (x * (- r₁)) * z)) ⟩
-      x * y + ((- r₁) * x) * z   ≡⟨ subst (λ w → x * y + ((- r₁) * x) * z ≡ x * y + w * z) (≡-sym *-negation)
-                                          (refl (x * y + ((- r₁) * x) * z)) ⟩
-      x * y + (- x) * z   ≡⟨ subst (λ w → x * y + (- x) * z ≡ x * y + w) mul-xy (refl (x * y + (- x) * z)) ⟩
-      x * y - x * z ∎
 
 >-asym : {x y : ℝ} → x > y → x ≮ y
 >-asym {x} {y} x>y x<y = case prf₁ prf₂ (trichotomy x y)
@@ -568,39 +828,6 @@ x≥-y→-x≤y x y x≥-y = case prf₁ prf₂ x≥-y
    prf₃ : ¬ x > y ∧ ¬ x ≡ y ∧ x < y → x ≤ y ∨ y ≤ x
    prf₃ (¬x>y , ¬x≡y , x<y) = inj₁ (inj₁ x<y)
 
-*-left-zero : {x : ℝ} → r₀ * x ≡ r₀
-*-left-zero {x} =
-  r₀ * x ≡⟨ *-comm r₀ x ⟩
-  x * r₀ ≡⟨ *-right-zero ⟩
-  r₀     ∎
-
-*-≢-zero : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x * y) ≢ r₀
-*-≢-zero {x} {y} x≢0 y≢0 h = p₁-helper p₂-helper
-
- where
-  p₁-helper : (x ≡ r₀) ∨ (y ≡ r₀) → ⊥
-  p₁-helper h₁ = case prf₁ prf₂ h₁
-
-    where
-     prf₁ : x ≡ r₀ → ⊥
-     prf₁ x≡0 = x≢0 x≡0
-
-     prf₂ : y ≡ r₀ → ⊥
-     prf₂ y≡0 = y≢0 y≡0
-
-  p₂-helper : (x ≡ r₀) ∨ (y ≡ r₀)
-  p₂-helper = inj₁ p₂₁-helper
-
-    where
-     p₂₁-helper : x ≡ r₀
-     p₂₁-helper =
-       x              ≡⟨ ≡-sym (*-neut x) ⟩
-       x * r₁         ≡⟨ subst (λ w → x * r₁ ≡ x * w) (≡-sym (*-inve y y≢0)) (refl (x * r₁)) ⟩
-       x * (y * y ⁻¹) ≡⟨ ≡-sym (*-asso x y (y ⁻¹)) ⟩
-       (x * y) * y ⁻¹ ≡⟨ subst (λ w → x * y * y ⁻¹ ≡ w * y ⁻¹) h (refl (x * y * y ⁻¹)) ⟩
-       r₀ * y ⁻¹      ≡⟨ *-left-zero ⟩
-       r₀             ∎
-
 >-r₀-produc : {x : ℝ} → x > r₀ → x * x > r₀
 >-r₀-produc {x} x>r₀ = >-∧-* (x>r₀ , x>r₀)
 
@@ -614,48 +841,15 @@ x≥-y→-x≤y x y x≥-y = case prf₁ prf₂ x≥-y
 <-r₀-produc : {x : ℝ} → x < r₀ → x * x > r₀
 <-r₀-produc {x} x<0 = <-∧-* (x<0 , x<0)
 
-*-∨-zero : {x y : ℝ} → (x ≡ r₀) ∨ (y ≡ r₀) → x * y ≡ r₀
-*-∨-zero {x} {y} h = case prf₁ prf₂ h
-
-  where
-   prf₁ : x ≡ r₀ → x * y ≡ r₀
-   prf₁ h =
-     x * y  ≡⟨ subst (λ w → x * y ≡ w * y) h (refl (x * y)) ⟩
-     r₀ * y ≡⟨ *-left-zero ⟩
-     r₀ ∎
-
-   prf₂ : y ≡ r₀ → x * y ≡ r₀
-   prf₂ h =
-     x * y ≡⟨ subst (λ w → x * y ≡ x * w) h (refl (x * y)) ⟩
-     x * r₀ ≡⟨ *-right-zero ⟩
-     r₀ ∎
-
 mulxx>0 : {x : ℝ} → (x > r₀) ∨ (x < r₀) → x * x > r₀
 mulxx>0 {x} h = case >-r₀-produc <-r₀-produc h
 
 <-*-cong-l : {x y z : ℝ} → z > r₀ → x < y → z * x < z * y
 <-*-cong-l {x} {y} {z} z>r₀ x<y = >-*-cong-l z>r₀ x<y
 
-r₀-sqr : sqr r₀ ≡ r₀
-r₀-sqr = *-right-zero
-
-r₁-sqr : sqr r₁ ≡ r₁
-r₁-sqr = *-neut r₁
 
 >-sqr : {x : ℝ} → x ≢ r₀ → sqr x > r₀
 >-sqr {x} x≢0 = mulxx>0 (x≢0→x>0∨x<0 x≢0)
-
-2-1=1 : ℕ2ℝ 2 - r₁ ≡ r₁
-2-1=1 =
-  ℕ2ℝ 2 - r₁
-    ≡⟨ subst (λ w → r₁ + (r₁ + r₀) - r₁ ≡ r₁ + w - r₁) (+-neut r₁) (refl (r₁ + (r₁ + r₀) - r₁)) ⟩
-  r₁ + r₁ - r₁
-    ≡⟨ +-asso r₁ r₁ (- r₁) ⟩
-  r₁ + (r₁ - r₁)
-    ≡⟨ subst (λ w → r₁ + (r₁ - r₁) ≡ r₁ + w) (+-inve r₁) (refl (r₁ + (r₁ - r₁))) ⟩
-  r₁ + r₀
-    ≡⟨ +-neut r₁ ⟩
-  r₁ ∎
 
 1>0 : r₁ > r₀
 1>0 = p₁-helper (>-sqr (1≢0))
@@ -680,26 +874,6 @@ r₁-sqr = *-neut r₁
      r₀         ≡⟨ ≡-sym *-right-zero ⟩
      - r₁ * r₀  ≡⟨ *-comm (- r₁) r₀ ⟩
      r₀ * - r₁      ∎
-
-x-y=0→x=y : (x y : ℝ) → x - y ≡ r₀ → x ≡ y
-x-y=0→x=y x y h =
-     x             ≡⟨ ≡-sym (+-neut x) ⟩
-     x + r₀        ≡⟨ subst (λ w → x + r₀ ≡ x + w) (≡-sym (+-inve y)) (refl (x + r₀)) ⟩
-     x + (y - y)   ≡⟨ subst (λ w → x + (y - y) ≡ x + w) (+-comm y (- y)) (refl (x + (y - y))) ⟩
-     x + (- y + y) ≡⟨ ≡-sym (+-asso x (- y) y) ⟩
-     (x - y) + y   ≡⟨ subst (λ w → (x - y) + y ≡ w + y) h (refl ((x - y) + y)) ⟩
-     r₀ + y        ≡⟨ +-comm r₀ y ⟩
-     y + r₀        ≡⟨ +-neut y ⟩
-     y      ∎
-
-2x=x+x : {x : ℝ} → (ℕ2ℝ 2) * x ≡ x + x
-2x=x+x {x} =
-  (ℕ2ℝ 2) * x     ≡⟨ subst (λ w → ℕ2ℝ 2 * x ≡ (r₁ + w) * x) (+-neut r₁) (refl (ℕ2ℝ 2 * x)) ⟩
-  (r₁ + r₁) * x   ≡⟨ subst (λ w → (r₁ + r₁) * x ≡ w) (*-comm (r₁ + r₁) x) (refl ((r₁ + r₁) * x)) ⟩
-  x * (r₁ + r₁)   ≡⟨ *-dist x r₁ r₁ ⟩
-  x * r₁ + x * r₁ ≡⟨ subst (λ w → x * r₁ + x * r₁ ≡ x * r₁ + w) (*-neut x) (refl (x * r₁ + x * r₁)) ⟩
-  x * r₁ + x      ≡⟨ subst (λ w → x * r₁ + x ≡ w + x) (*-neut x) (refl (x * r₁ + x)) ⟩
-  x + x ∎
 
 x+1>x : (x : ℝ) → x + r₁ > x
 x+1>x x = p₁-helper (>-+-cancel-r (p₂-helper (p₃-helper (p₄-helper 1>0))))
@@ -795,163 +969,91 @@ x<x+1 x = >-to-< (x+1>x x)
     p-helper : {x y z : ℝ} → z * x > z * y → x * z > y * z
     p-helper {x} {y} {z} h = subst₂ (λ t₁ t₂ → t₁ > t₂) (*-comm z x) (*-comm z y) h
 
-*-dist-r : (x y z : ℝ) → (y + z) * x ≡ y * x + z * x
-*-dist-r x y z =
-  (y + z) * x       ≡⟨ subst (λ w → ((y + z) * x) ≡ (w)) ( ≡-sym ( *-comm x (y + z) ) ) (refl ((y + z) * x)) ⟩
-  x * (y + z)       ≡⟨ *-dist x y z ⟩
-  (x * y) + (x * z) ≡⟨ subst (λ w → ((x * y) + (x * z)) ≡ (w + (x * z))) (*-comm x y) (refl (x * y + x * z)) ⟩
-  (y * x) + (x * z) ≡⟨ subst (λ w → ((y * x) + (x * z)) ≡ ((y * x) + w)) (*-comm x z) (refl (y * x + x * z)) ⟩
-  (y * x) + (z * x) ∎
+≥-refl : {x : ℝ} → x ≥ x
+≥-refl {x} = inj₂ (refl x)
 
-*-double-dist : (a b c d : ℝ) → (a + b) * (c + d) ≡ (a * c + a * d) + (b * c + b * d)
-*-double-dist a b c d =
-  (a + b) * (c + d)
-   ≡⟨ *-dist (a + b) c d ⟩
-  (a + b) * c + (a + b) * d
-   ≡⟨ subst (λ w → (a + b) * c + (a + b) * d ≡ w + (a + b) * d) (*-dist-r c a b) (refl ((a + b) * c + (a + b) * d)) ⟩
-  (a * c + b * c) + (a + b) * d
-   ≡⟨ subst (λ w → a * c + b * c + (a + b) * d ≡ a * c + b * c + w) (*-dist-r d a b) (refl (a * c + b * c + (a + b) * d)) ⟩
-  (a * c + b * c) + (a * d + b * d)
-   ≡⟨ +-asso (a * c) (b * c) (a * d + b * d) ⟩
-  a * c + (b * c + (a * d + b * d))
-   ≡⟨ subst (λ w → a * c + (b * c + (a * d + b * d)) ≡ a * c + w) (≡-sym (+-asso (b * c) (a * d) (b * d)))
-   (refl (a * c + (b * c + (a * d + b * d)))) ⟩
-  a * c + ((b * c + a * d) + b * d)
-   ≡⟨ subst (λ w → a * c + (b * c + a * d + b * d) ≡ a * c + (w + b * d)) (+-comm (b * c) (a * d))
-   (refl (a * c + (b * c + a * d + b * d))) ⟩
-  a * c + ((a * d + b * c) + b * d)
-   ≡⟨ subst (λ w → a * c + (a * d + b * c + b * d) ≡ a * c + w) (+-asso (a * d) (b * c) (b * d)) (refl (a * c + (a * d + b * c + b * d))) ⟩
-  a * c + (a * d + (b * c + b * d))
-   ≡⟨ ≡-sym (+-asso (a * c) (a * d) (b * c + b * d)) ⟩
-  (a * c + a * d) + (b * c + b * d) ∎
+≥-trans : {x y z : ℝ} → x ≥ y → y ≥ z → x ≥ z
+≥-trans {x} {y} {z} x≥y y≥z = case prf₁ prf₂ x≥y
+  where
+    prf₁ : x > y → (x > z) ∨ (x ≡ z)
+    prf₁ x>y = case prf₁₁ prf₁₂ y≥z
+     where
+       prf₁₁ : y > z → (x > z) ∨ (x ≡ z)
+       prf₁₁ y>z = inj₁ (>-trans x>y y>z)
 
--- Trinomial Perfect Square.
+       prf₁₂ : y ≡ z → (x > z) ∨ (x ≡ z)
+       prf₁₂ y≡z = inj₁ (>-≡→>-2 x>y y≡z)
 
-TPS : (x y : ℝ) → sqr (x + y) ≡ sqr x + ℕ2ℝ 2 * (x * y) + sqr y
-TPS x y =
-  sqr (x + y)
-    ≡⟨ *-double-dist x y x y ⟩
-  sqr x + x * y + (y * x + sqr y)
-    ≡⟨ +-asso (sqr x) (x * y) (y * x + sqr y) ⟩
-  sqr x + (x * y + (y * x + sqr y))
-    ≡⟨ subst (λ w → sqr x + (x * y + (y * x + sqr y)) ≡ sqr x + w) (≡-sym (+-asso (x * y) (y * x) (sqr y)))
-    (refl (sqr x + (x * y + (y * x + sqr y)))) ⟩
-  sqr x + ((x * y + y * x) + sqr y)
-    ≡⟨ subst (λ w → sqr x + (x * y + y * x + sqr y) ≡ sqr x + (x * y + w + sqr y)) (*-comm y x)
-    (refl (sqr x + (x * y + y * x + sqr y))) ⟩
-  sqr x + ((x * y + x * y) + sqr y)
-    ≡⟨ subst (λ w → sqr x + (x * y + x * y + sqr y) ≡ sqr x + (w + sqr y)) (≡-sym 2x=x+x)
-    (refl (sqr x + (x * y + x * y + sqr y))) ⟩
-  sqr x + (ℕ2ℝ 2 * (x * y) + sqr y)
-    ≡⟨ ≡-sym (+-asso (sqr x) (ℕ2ℝ 2 * (x * y)) (sqr y)) ⟩
-  sqr x + ℕ2ℝ 2 * (x * y) + sqr y   ∎
+    prf₂ : x ≡ y → (x > z) ∨ (x ≡ z)
+    prf₂ x≡y = case prf₂₁ prf₂₂ y≥z
+     where
+       prf₂₁ : y > z → (x > z) ∨ (x ≡ z)
+       prf₂₁ y>z = inj₁ (≡->→> x≡y y>z)
 
-TPS1 : (x : ℝ) → sqr (x + r₁) ≡ sqr x + ℕ2ℝ 2 * x + r₁
-TPS1 x =
-  sqr (x + r₁)
-   ≡⟨ TPS x r₁ ⟩
-  sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁
-   ≡⟨ subst (λ w → sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁ ≡ sqr x + ℕ2ℝ 2 * w + sqr r₁) (*-neut x)
-   (refl (sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁)) ⟩
-  sqr x + ℕ2ℝ 2 * x + sqr r₁
-   ≡⟨ subst (λ w → sqr x + ℕ2ℝ 2 * x + sqr r₁ ≡ sqr x + ℕ2ℝ 2 * x + w) (*-neut r₁)
-   (refl (sqr x + ℕ2ℝ 2 * x + sqr r₁)) ⟩
-  sqr x + ℕ2ℝ 2 * x + r₁ ∎
+       prf₂₂ : y ≡ z → (x > z) ∨ (x ≡ z)
+       prf₂₂ y≡z = inj₂ (≡-trans x≡y y≡z)
 
-*-inve-product : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x * y) ≢ r₀ → (x * y) ⁻¹ ≡ x ⁻¹ * y ⁻¹
-*-inve-product {x} {y} h₁ h₂ h₃ =
-  (x * y) ⁻¹
-    ≡⟨ ≡-sym (*-neut ((x * y) ⁻¹)) ⟩
-  (x * y) ⁻¹ * r₁
-    ≡⟨ *-comm ((x * y) ⁻¹) r₁ ⟩
-  r₁ * (x * y) ⁻¹
-    ≡⟨ subst (λ w → r₁ * (x * y) ⁻¹ ≡ w * (x * y) ⁻¹) (≡-sym (p-helper h₁ h₂) ) (refl (r₁ * (x * y) ⁻¹)) ⟩
-  ((x ⁻¹ * y ⁻¹) * (x * y)) * (x * y) ⁻¹
-    ≡⟨ *-asso (x ⁻¹ * y ⁻¹) (x * y) ((x * y) ⁻¹) ⟩
-  (x ⁻¹ * y ⁻¹) * (x * y * (x * y) ⁻¹)
-    ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * ((x * y) * (x * y) ⁻¹) ≡ (x ⁻¹ * y ⁻¹) * w) (*-inve (x * y) h₃) (refl (x ⁻¹ * y ⁻¹ * (x * y * (x * y) ⁻¹))) ⟩
-  (x ⁻¹ * y ⁻¹) * r₁
-    ≡⟨ *-neut (x ⁻¹ * y ⁻¹) ⟩
-  x ⁻¹ * y ⁻¹ ∎
+≤-+-left : {x y z : ℝ} → x ≤ y → z + x ≤ z + y
+≤-+-left {x} {y} {z} x≤y = case prf₁ prf₂ x≤y
 
   where
-    p-helper : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x ⁻¹ * y ⁻¹) * (x * y) ≡ r₁
-    p-helper {x} {y} h₁ h₂ =
-      (x ⁻¹ * y ⁻¹) * (x * y)
-        ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * (x * y) ≡ (x ⁻¹ * y ⁻¹) * w) (*-comm x y) (refl (x ⁻¹ * y ⁻¹ * (x * y))) ⟩
-      (x ⁻¹ * y ⁻¹) * (y * x)
-        ≡⟨ ≡-sym (*-asso (x ⁻¹ * y ⁻¹) y x) ⟩
-      ((x ⁻¹ * y ⁻¹) * y) * x
-        ≡⟨ subst (λ w → ((x ⁻¹ * y ⁻¹) * y) * x ≡ w * x) (*-asso (x ⁻¹) (y ⁻¹) y) (refl (x ⁻¹ * y ⁻¹ * y * x)) ⟩
-      (x ⁻¹ * (y ⁻¹ * y)) * x
-        ≡⟨ subst (λ w → (x ⁻¹ * (y ⁻¹ * y)) * x ≡ (x ⁻¹ * w) * x) (*-comm (y ⁻¹) y) (refl (x ⁻¹ * (y ⁻¹ * y) * x)) ⟩
-      (x ⁻¹ * (y * y ⁻¹)) * x
-        ≡⟨ subst (λ w → (x ⁻¹ * (y * y ⁻¹)) * x ≡ (x ⁻¹ * w) * x) (*-inve y h₂) (refl (x ⁻¹ * (y * y ⁻¹) * x)) ⟩
-      (x ⁻¹ * r₁) * x
-        ≡⟨ subst (λ w → (x ⁻¹ * r₁) * x ≡ w * x) (*-neut (x ⁻¹)) (refl (x ⁻¹ * r₁ * x)) ⟩
-      x ⁻¹ * x
-        ≡⟨ *-comm (x ⁻¹) x ⟩
-      x * x ⁻¹
-        ≡⟨ *-inve x h₁ ⟩
-      r₁ ∎
+   prf₁ : x < y → z + x < z + y ∨ z + x ≡ z + y
+   prf₁ x<y = inj₁ (<-+-left x<y)
 
--- Adding Heterogeneous Fractions.
+   prf₂ : x ≡ y → z + x < z + y ∨ z + x ≡ z + y
+   prf₂ x=y = inj₂ (≡-+-cong-l x=y)
 
-+-fractional : {a b c d : ℝ} → b ≢ r₀ → d ≢ r₀ → a * b ⁻¹ + c * d ⁻¹ ≡ (a * d + b * c) * (b * d) ⁻¹
-+-fractional {a} {b} {c} {d} b≠0 d≠0 = ≡-sym p-helper
+≤-+-right : {x y z : ℝ} → x ≤ y → x + z ≤ y + z
+≤-+-right {x} {y} {z} x≤y = case prf₁ prf₂ x≤y
 
   where
-   p-helper : (a * d + b * c) * (b * d) ⁻¹ ≡ a * b ⁻¹ + c * d ⁻¹
-   p-helper =
-     (a * d + b * c) * (b * d) ⁻¹
-      ≡⟨ *-dist-r ((b * d) ⁻¹) (a * d) (b * c) ⟩
-     (a * d) * (b * d) ⁻¹ + b * c * (b * d) ⁻¹
-      ≡⟨ subst (λ w → (a * d) * (b * d) ⁻¹ + b * c * (b * d) ⁻¹ ≡ w + b * c * (b * d) ⁻¹) (*-asso a d ((b * d) ⁻¹))
-      (refl (a * d * (b * d) ⁻¹ + b * c * (b * d) ⁻¹)) ⟩
-     a * (d * (b * d) ⁻¹) + b * c * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * (d * (b * d) ⁻¹) + b * c * (b * d) ⁻¹ ≡ a * (d * w ⁻¹) + b * c * (b * d) ⁻¹) (*-comm b d)
-      (refl (a * (d * (b * d) ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
-     a * (d * (d * b) ⁻¹) + (b * c) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * (d * (d * b) ⁻¹) + b * c * (b * d) ⁻¹ ≡ a * (d * w) + b * c * (b * d) ⁻¹)
-      (*-inve-product d≠0 b≠0 (*-≢-zero d≠0 b≠0)) (refl (a * (d * (d * b) ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
-     a * (d * (d ⁻¹ * b ⁻¹)) + (b * c) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * (d * (d ⁻¹ * b ⁻¹)) + b * c * (b * d) ⁻¹ ≡ a * w + b * c * (b * d) ⁻¹)
-      (≡-sym (*-asso d (d ⁻¹) (b ⁻¹))) (refl (a * (d * (d ⁻¹ * b ⁻¹)) + (b * c) * (b * d) ⁻¹)) ⟩
-     a * ((d * d ⁻¹) * b ⁻¹) + (b * c) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * (d * d ⁻¹ * b ⁻¹) + (b * c) * (b * d) ⁻¹ ≡ a * (w * b ⁻¹) + b * c * (b * d) ⁻¹) (*-inve d d≠0)
-      (refl (a * (d * d ⁻¹ * b ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
-     a * (r₁ * b ⁻¹) + (b * c) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * (r₁ * b ⁻¹) + b * c * (b * d) ⁻¹ ≡ a * w + b * c * (b * d) ⁻¹) (*-comm r₁ (b ⁻¹))
-      (refl (a * (r₁ * b ⁻¹) + b * c * (b * d) ⁻¹)) ⟩
-     a * (b ⁻¹ * r₁) + (b * c) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * (b ⁻¹ * r₁) + b * c * (b * d) ⁻¹ ≡ a * w + b * c * (b * d) ⁻¹) (*-neut (b ⁻¹))
-      (refl (a * (b ⁻¹ * r₁) + b * c * (b * d) ⁻¹)) ⟩
-     a * b ⁻¹ + (b * c) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * b ⁻¹ + b * c * (b * d) ⁻¹ ≡ a * b ⁻¹ + w * (b * d) ⁻¹) (*-comm b c)
-      (refl (a * b ⁻¹ + b * c * (b * d) ⁻¹)) ⟩
-     a * b ⁻¹ + (c * b) * (b * d) ⁻¹
-      ≡⟨ subst (λ w → a * b ⁻¹ + c * b * (b * d) ⁻¹ ≡ a * b ⁻¹ + w) (*-asso c b ((b * d) ⁻¹))
-      (refl (a * b ⁻¹ + c * b * (b * d) ⁻¹)) ⟩
-     a * b ⁻¹ + c * (b * (b * d) ⁻¹)
-      ≡⟨ subst (λ w → a * b ⁻¹ + c * (b * (b * d) ⁻¹) ≡ a * b ⁻¹ + c * (b * w)) (*-inve-product b≠0 d≠0 (*-≢-zero b≠0 d≠0))
-      (refl (a * b ⁻¹ + c * (b * (b * d) ⁻¹))) ⟩
-     a * b ⁻¹ + c * (b * (b ⁻¹ * d ⁻¹))
-      ≡⟨ subst (λ w → a * b ⁻¹ + c * (b * (b ⁻¹ * d ⁻¹)) ≡ a * b ⁻¹ + c * w) (≡-sym (*-asso b (b ⁻¹) (d ⁻¹)))
-      (refl (a * b ⁻¹ + c * (b * (b ⁻¹ * d ⁻¹)))) ⟩
-     a * b ⁻¹ + c * ((b * b ⁻¹) * d ⁻¹)
-      ≡⟨ subst (λ w → a * b ⁻¹ + c * (b * b ⁻¹ * d ⁻¹) ≡ a * b ⁻¹ + c * (w * d ⁻¹)) (*-inve b b≠0)
-      (refl (a * b ⁻¹ + c * (b * b ⁻¹ * d ⁻¹))) ⟩
-     a * b ⁻¹ + c * (r₁ * d ⁻¹)
-      ≡⟨ subst (λ w → a * b ⁻¹ + c * (r₁ * d ⁻¹) ≡ a * b ⁻¹ + c * w) (*-comm r₁ (d ⁻¹)) (refl (a * b ⁻¹ + c * (r₁ * d ⁻¹))) ⟩
-     a * b ⁻¹ + c * (d ⁻¹ * r₁)
-     ≡⟨ subst (λ w → a * b ⁻¹ + c * (d ⁻¹ * r₁) ≡ a * b ⁻¹ + c * w) (*-neut (d ⁻¹)) (refl (a * b ⁻¹ + c * (d ⁻¹ * r₁))) ⟩
-     a * b ⁻¹ + c * d ⁻¹   ∎
+   prf₁ : x < y → x + z < y + z ∨ x + z ≡ y + z
+   prf₁ x<y = inj₁ (<-+-right x<y)
 
--- One is equal to its multiplicative inverse.
+   prf₂ : x ≡ y → x + z < y + z ∨ x + z ≡ y + z
+   prf₂ x=y = inj₂ (≡-+-cong-r x=y)
 
-1≡1⁻¹ : r₁ ≡ r₁ ⁻¹
-1≡1⁻¹ =
-  r₁         ≡⟨ ≡-sym (*-inve r₁ 1≢0) ⟩
-  r₁ * r₁ ⁻¹ ≡⟨ *-comm r₁ (r₁ ⁻¹) ⟩
-  r₁ ⁻¹ * r₁ ≡⟨ *-neut (r₁ ⁻¹) ⟩
-  r₁ ⁻¹      ∎
+≤-trans : {x y z : ℝ} → x ≤ y → y ≤ z → x ≤ z
+≤-trans {x} {y} {z} x≤y y≤z = case prf₁ prf₂ x≤y
+
+  where
+    prf₁ : x < y → (x < z) ∨ (x ≡ z)
+    prf₁ x<y = case prf₁₁ prf₁₂ y≤z
+     where
+       prf₁₁ : y < z → (x < z) ∨ (x ≡ z)
+       prf₁₁ y<z = inj₁ (<-trans x<y y<z)
+
+       prf₁₂ : y ≡ z → (x < z) ∨ (x ≡ z)
+       prf₁₂ y≡z = inj₁ (<-≡-→-< x<y y≡z)
+
+    prf₂ : x ≡ y → (x < z) ∨ (x ≡ z)
+    prf₂ x≡y = case prf₂₁ prf₂₂ y≤z
+     where
+       prf₂₁ : y < z → (x < z) ∨ (x ≡ z)
+       prf₂₁ y<z = inj₁ (≡-<→< x≡y y<z)
+
+       prf₂₂ : y ≡ z → (x < z) ∨ (x ≡ z)
+       prf₂₂ y≡z = inj₂ (≡-trans x≡y y≡z)
+
+≤-≤-+ : {x y z w : ℝ} → x ≤ y → z ≤ w → x + z ≤ y + w
+≤-≤-+ {x} {y} {z} {w} x≤y z≤w = ≤-trans (≤-+-right x≤y) (≤-+-left z≤w)
+
+x<0∨x≥0 : (x : ℝ) → (x < r₀) ∨ (x ≥ r₀)
+x<0∨x≥0 x with trichotomy x r₀
+... | inj₁ (x>0 , _)              = inj₂ (inj₁ x>0)
+... | inj₂ (inj₁ (_ , x≡0 , _))   = inj₂ (inj₂ x≡0)
+... | inj₂ (inj₂ (x₁ , x₂ , x<0)) = inj₁ x<0
+
+weakTrichotomy : (x y : ℝ) → (x > y) ∨ (x ≡ y) ∨ (x < y)
+weakTrichotomy x y = case prf1 (case prf2 prf3) (trichotomy x y)
+
+  where
+   prf1 : x > y ∧ ¬ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
+   prf1 (x>y , h) = inj₁ x>y
+
+   prf2 : ¬ x > y ∧ x ≡ y ∧ ¬ x < y → x > y ∨ x ≡ y ∨ x < y
+   prf2 (x≯y , x=y , x≮y) = ∨-comm (∨-assoc₁ (inj₁ x=y))
+
+   prf3 : ¬ x > y ∧ ¬ x ≡ y ∧ x < y → x > y ∨ x ≡ y ∨ x < y
+   prf3 (x≯y , x≠y , x<y) = ∨-assoc₂ (inj₂ x<y)
+

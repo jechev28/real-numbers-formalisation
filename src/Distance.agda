@@ -1,10 +1,12 @@
+
 module Distance where
 
-open import AbsoluteValue
-open import Axioms
+open import AbsoluteValueDefinition
+open import AbsoluteValueProperties
+open import RealNumbersAxioms
 open import EqReasoning
 open import EqProperties
-open import Logic
+open import LogicDefinitions
 open import Nat
 open import Properties
 
@@ -22,7 +24,7 @@ d-refl x y = d-refl-r , d-refl-l
 
   where
    d-refl-r : (dist x y ≡ r₀) → x ≡ y
-   d-refl-r h with case-abs (x - y)
+   d-refl-r h with x<0∨x≥0 (x - y)
    ... | inj₁ p = ⊥-elim (≡→≮ (-x=0→x=0 (x - y) h) (>-to-< p))
    ... | inj₂ _ = x-y=0→x=y x y h
 
@@ -40,12 +42,12 @@ d-refl x y = d-refl-r , d-refl-l
      r₀      ∎
 
 d-pos : (x y : ℝ) → dist x y ≥ r₀
-d-pos x y with case-abs (x - y)
+d-pos x y with x<0∨x≥0 (x - y)
 ... | inj₁ p = inj₁ (x<0→-x>0 (>-to-< p))
 ... | inj₂ p = p
 
 d-sym  : (x y : ℝ) → dist x y ≡ dist y x
-d-sym x y with case-abs (x - y)
+d-sym x y with x<0∨x≥0 (x - y)
 ... | inj₁ p = ≡-sym (p₁-helper (>-+-cancel-r (p₂-helper (p₃-helper
                        (<-to-> (x-y<0→x<y p))))))
 

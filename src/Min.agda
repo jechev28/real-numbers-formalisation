@@ -1,8 +1,9 @@
+
 module Min where
 
-open import Axioms
+open import RealNumbersAxioms
 open import EqProperties
-open import Logic
+open import LogicDefinitions
 open import Properties
 open import ClassicLogic
 

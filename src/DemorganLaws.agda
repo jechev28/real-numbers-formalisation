@@ -1,7 +1,7 @@
 module DemorganLaws where
 
 open import ClassicLogic
-open import Logic
+open import LogicDefinitions
 
 -- De Morgan's laws
 

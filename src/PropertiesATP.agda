@@ -1,8 +1,8 @@
+
 module PropertiesATP where
 
-open import Axioms
-open import Logic
--- open import Nat
+open import RealNumbersAxioms
+open import LogicDefinitions
 
 postulate ≡-<-trans : {x y z : ℝ} → x ≡ y → y < z → x < z
 {-# ATP prove ≡-<-trans #-}

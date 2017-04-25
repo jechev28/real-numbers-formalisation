@@ -1,44 +1,32 @@
-module AbsoluteValue where
-
-open import Axioms
-open import EqReasoning
-open import EqProperties
-open import Logic
-open import PoProperties
-open import Properties
-
-case-abs : (x : ℝ) → (x < r₀) ∨ (x ≥ r₀)
-case-abs x with trichotomy x r₀
-... | inj₁ (x>0 , _)              = inj₂ (inj₁ x>0)
-... | inj₂ (inj₁ (_ , x≡0 , _))   = inj₂ (inj₂ x≡0)
-... | inj₂ (inj₂ (x₁ , x₂ , x<0)) = inj₁ x<0
-
--- Absolute value definition.
-
-abs : ℝ → ℝ
-abs x with case-abs x
-... | inj₁ _ = - x
-... | inj₂ _ = x
 
 -- Properties of the absolute value.
 
+module AbsoluteValueProperties where
+
+open import AbsoluteValueDefinition
+open import RealNumbersAxioms
+open import EqReasoning
+open import EqProperties
+open import LogicDefinitions
+open import Properties
+
 abs-0 : abs r₀ ≡ r₀
-abs-0 with case-abs r₀
+abs-0 with x<0∨x≥0 r₀
 abs-0 | inj₁ 0<0 = ⊥-elim (<-irrefl 0<0)
 abs-0 | inj₂ h = refl r₀
 
 x>0→absx=x : (x : ℝ) → x > r₀ → abs x ≡ x
-x>0→absx=x x x>0 with case-abs x
+x>0→absx=x x x>0 with x<0∨x≥0 x
 ... | inj₁ p = ⊥-elim (≥→≮ (inj₁ x>0) p)
 ... | inj₂ _ = refl x
 
 x<0→absx=-x : (x : ℝ) → x < r₀ → abs x ≡ - x
-x<0→absx=-x x x<0 with case-abs x
+x<0→absx=-x x x<0 with x<0∨x≥0 x
 ... | inj₁ _ = refl (- x)
 ... | inj₂ p = ⊥-elim (≥→≮ p x<0)
 
 abs-minus : (x : ℝ) → abs (- x) ≡ abs x
-abs-minus x with case-abs (- x)
+abs-minus x with x<0∨x≥0 (- x)
 ... | inj₁ p = ≡-sym (p-helper p)
 
   where
@@ -64,7 +52,7 @@ abs-minus x with case-abs (- x)
     abs x     ∎
 
 abs≥x : (x : ℝ) → abs x ≥ x
-abs≥x x with case-abs x
+abs≥x x with x<0∨x≥0 x
 ... | inj₁ p = inj₁ (>-+-cancel-r  (p₁-helper (>-*-cancel-l (>-inve-r₀
                       (>-trans 2>1 1>0)) (p₂-helper (p₃-helper p)))))
 
@@ -111,7 +99,7 @@ abs≥x x with case-abs x
 ... | inj₂ _ = inj₂ (refl x)
 
 abs-minus≤x : (x : ℝ) → - (abs x) ≤ x
-abs-minus≤x x with case-abs x
+abs-minus≤x x with x<0∨x≥0 x
 ... | inj₁ _ = inj₂ mul--x
 ... | inj₂ p = case prf₁ prf₂ p
 
@@ -189,7 +177,7 @@ x+y≤absx+absy x y = ≤-≤-+ (≥-to-≤ (abs≥x x)) (≥-to-≤ (abs≥x y)
 -absx+-absy≤x+y x y = ≤-≤-+ (abs-minus≤x x) (abs-minus≤x y)
 
 abs-tri : (x y : ℝ) → abs (x + y) ≤ abs x + abs y
-abs-tri x y with case-abs (x + y)
+abs-tri x y with x<0∨x≥0 (x + y)
 ... | inj₁ p = helper
 
   where

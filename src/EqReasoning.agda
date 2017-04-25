@@ -1,6 +1,6 @@
 module EqReasoning where
 
-open import Axioms
+open import RealNumbersAxioms
 open import EqProperties
 
 infixr 2 _≡⟨_⟩_

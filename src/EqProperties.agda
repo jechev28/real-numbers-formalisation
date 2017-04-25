@@ -1,6 +1,7 @@
+
 module EqProperties where
 
-open import Axioms
+open import RealNumbersAxioms
 
 subst : (P : ℝ → Set) → {x y : ℝ} → x ≡ y → P x → P y
 subst P (refl x) Px = Px
