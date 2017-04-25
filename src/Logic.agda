@@ -69,11 +69,11 @@ data ⊥ : Set where
    prf1 A = inj₁ (inj₁ A)
 
    prf2 : B ∨ C → (A ∨ B) ∨ C
-   prf2 B∨C = case prf11 prf22 B∨C
+   prf2 B∨C = case prf₁₁ prf22 B∨C
 
     where
-     prf11 : B → (A ∨ B) ∨ C
-     prf11 B = inj₁ (inj₂ B)
+     prf₁₁ : B → (A ∨ B) ∨ C
+     prf₁₁ B = inj₁ (inj₂ B)
 
      prf22 : C → (A ∨ B) ∨ C
      prf22 C = inj₂ C

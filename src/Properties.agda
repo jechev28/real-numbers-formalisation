@@ -90,13 +90,13 @@ open import Nat
   y               ∎
 
 ≡-*-cancel-r : {x y z : ℝ} → z ≢ r₀ → x * z ≡ y * z → x ≡ y
-≡-*-cancel-r {x} {y} {z} h1 h2 =
+≡-*-cancel-r {x} {y} {z} h₁ h₂ =
   x              ≡⟨ ≡-sym (*-neut x) ⟩
-  x * r₁         ≡⟨ subst (λ w → (x * r₁) ≡ (x * w)) (≡-sym (*-inve z h1)) (refl (x * r₁)) ⟩
+  x * r₁         ≡⟨ subst (λ w → (x * r₁) ≡ (x * w)) (≡-sym (*-inve z h₁)) (refl (x * r₁)) ⟩
   x * (z * z ⁻¹) ≡⟨ ≡-sym (*-asso x z (z ⁻¹))  ⟩
-  (x * z) * z ⁻¹ ≡⟨ subst (λ w → (x * z) * z ⁻¹ ≡ w * z ⁻¹) h2 (refl (x * z * z ⁻¹)) ⟩
+  (x * z) * z ⁻¹ ≡⟨ subst (λ w → (x * z) * z ⁻¹ ≡ w * z ⁻¹) h₂ (refl (x * z * z ⁻¹)) ⟩
   (y * z) * z ⁻¹ ≡⟨ *-asso y z (z ⁻¹) ⟩
-  y * (z * z ⁻¹) ≡⟨ subst (λ w → (y * (z * z ⁻¹)) ≡ (y * w)) (*-inve z h1) (refl (y * (z * z ⁻¹))) ⟩
+  y * (z * z ⁻¹) ≡⟨ subst (λ w → (y * (z * z ⁻¹)) ≡ (y * w)) (*-inve z h₁) (refl (y * (z * z ⁻¹))) ⟩
   y * r₁         ≡⟨ *-neut y ⟩
   y              ∎
 
@@ -151,58 +151,58 @@ open import Nat
       x * r₀ + r₀     ∎
 
 <-to-minus : {x y : ℝ} → y < x → x - y > r₀
-<-to-minus {x} {y} y<x = >-+-cancel-r (p1-helper (>-+-right y<x))
+<-to-minus {x} {y} y<x = >-+-cancel-r (p₁-helper (>-+-right y<x))
 
   where
-   p1-helper : x + r₀ > y + r₀ → x - y + y > r₀ + y
-   p1-helper h1 = subst₂ (λ t₁ t₂ → t₁ > t₂) p11-helper (+-comm y r₀) h1
+   p₁-helper : x + r₀ > y + r₀ → x - y + y > r₀ + y
+   p₁-helper h₁ = subst₂ (λ t₁ t₂ → t₁ > t₂) p₁₁-helper (+-comm y r₀) h₁
 
     where
-     p11-helper : x + r₀ ≡ x - y + y
-     p11-helper =
+     p₁₁-helper : x + r₀ ≡ x - y + y
+     p₁₁-helper =
        x + r₀ ≡⟨ subst (λ w → x + r₀ ≡ x + w) (≡-sym (+-inve y)) (refl (x + r₀)) ⟩
        x + (y - y) ≡⟨ subst (λ w → x + (y - y) ≡ x + w) (+-comm y (- y)) (refl (x + (y - y))) ⟩
        x + (- y + y) ≡⟨ ≡-sym (+-asso x (- y) y) ⟩
        x - y + y  ∎
 minus-to-< : {x y : ℝ} → x - y > r₀ → y < x
-minus-to-< {x} {y} h = >-to-< (p1-helper (p2-helper (p3-helper (>-+-right h))))
+minus-to-< {x} {y} h = >-to-< (p₁-helper (p₂-helper (p₃-helper (>-+-right h))))
 
   where
-   p1-helper : x + r₀ > y → x > y
-   p1-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) (+-neut x) (refl y)
+   p₁-helper : x + r₀ > y → x > y
+   p₁-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) (+-neut x) (refl y)
 
-   p2-helper : x + (y - y) > y → x + r₀ > y
-   p2-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) (subst (λ w → x + (y - y) ≡ x + w) (+-inve y) (refl (x + (y - y)))) (refl y)
+   p₂-helper : x + (y - y) > y → x + r₀ > y
+   p₂-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) (subst (λ w → x + (y - y) ≡ x + w) (+-inve y) (refl (x + (y - y)))) (refl y)
 
-   p3-helper : x - y + y > r₀ + y → x + (y - y) > y
-   p3-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) p31-helper p32-helper
+   p₃-helper : x - y + y > r₀ + y → x + (y - y) > y
+   p₃-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) p₃₁-helper p₃₂-helper
 
     where
-     p31-helper : x - y + y ≡ x + (y - y)
-     p31-helper =
+     p₃₁-helper : x - y + y ≡ x + (y - y)
+     p₃₁-helper =
       x - y + y   ≡⟨ +-asso x (- y) y ⟩
       x + (- y + y)   ≡⟨ subst (λ w → x + (- y + y) ≡ x + w) (+-comm (- y) y) (refl (x + (- y + y))) ⟩
       x + (y - y) ∎
 
-     p32-helper : r₀ + y ≡ y
-     p32-helper =
+     p₃₂-helper : r₀ + y ≡ y
+     p₃₂-helper =
       r₀ + y   ≡⟨ +-comm r₀ y ⟩
       y + r₀   ≡⟨ +-neut y ⟩
       y ∎
 
 >-to-minus : {x y : ℝ} → y > x → x - y < r₀
->-to-minus {x} {y} y>x = >-+-cancel-r (p1-helper (p2-helper (>-to-< (subst₂ (λ t₁ t₂ → t₁ > t₂) (refl y) (≡-sym (+-neut x)) y>x))))
+>-to-minus {x} {y} y>x = >-+-cancel-r (p₁-helper (p₂-helper (>-to-< (subst₂ (λ t₁ t₂ → t₁ > t₂) (refl y) (≡-sym (+-neut x)) y>x))))
 
   where
-   p1-helper : x + ((- y) + y) < y + r₀ → (x + (- y)) + y < r₀ + y
-   p1-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) (+-comm y r₀) (≡-sym (+-asso x (- y) y))
+   p₁-helper : x + ((- y) + y) < y + r₀ → (x + (- y)) + y < r₀ + y
+   p₁-helper = subst₂ (λ t₁ t₂ → t₁ > t₂) (+-comm y r₀) (≡-sym (+-asso x (- y) y))
 
-   p2-helper : x + r₀ < y → x + ((- y) + y) < y + r₀
-   p2-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (≡-sym p22-helper) (≡-sym (+-neut y))
+   p₂-helper : x + r₀ < y → x + ((- y) + y) < y + r₀
+   p₂-helper = subst₂ (λ t₁ t₂ → t₁ < t₂) (≡-sym p₂₂-helper) (≡-sym (+-neut y))
 
      where
-      p22-helper : x + (- y + y) ≡ x + r₀
-      p22-helper =
+      p₂₂-helper : x + (- y + y) ≡ x + r₀
+      p₂₂-helper =
         x + (- y + y) ≡⟨ subst (\w → x + (- y + y) ≡ x + w ) (+-comm (- y) y) (refl (x + (- y + y))) ⟩
         x + (y + (- y)) ≡⟨ subst (\w → x + (y + (- y)) ≡ x + w) (+-inve y) (refl (x + (y + (- y)))) ⟩
         x + r₀ ∎
@@ -253,11 +253,11 @@ x≢0→x>0∨x<0 {x} x≢0 = case prf₁ prf₂ (trichotomy x r₀)
      prf₂₂ h = inj₂ (∧-proj₂ (∧-assoc₁ h))
 
 x≢0→x⁻¹≢0 : {x : ℝ} → x ≢ r₀ → (x ⁻¹) ≢ r₀
-x≢0→x⁻¹≢0 {x} x≢0 x⁻¹≡0 = 1≢0  (p1-helper (≡-*-cong-l x x⁻¹≡0))
+x≢0→x⁻¹≢0 {x} x≢0 x⁻¹≡0 = 1≢0  (p₁-helper (≡-*-cong-l x x⁻¹≡0))
 
   where
-   p1-helper : x * x ⁻¹ ≡ x * r₀ → r₁ ≡ r₀
-   p1-helper h = subst₂ (λ t₁ t₂ → t₁ ≡ t₂) (*-inve x x≢0) *-right-zero h
+   p₁-helper : x * x ⁻¹ ≡ x * r₀ → r₁ ≡ r₀
+   p₁-helper h = subst₂ (λ t₁ t₂ → t₁ ≡ t₂) (*-inve x x≢0) *-right-zero h
 
 x<0→-x>0 : {x : ℝ} → x < r₀ → - x > r₀
 x<0→-x>0 {x} h = subst₂ (λ t₁ t₂ → t₁ > t₂) (─-neut) (refl r₀) (<-to-minus h)
@@ -398,14 +398,14 @@ mul-x-y {x} {y} =
 >→≢ x>y (refl x) = >-irrefl x>y
 
 ≥→≮  : {x y : ℝ} → x ≥ y → x ≮ y
-≥→≮ {x} {y} x≥y x<y = case prf1 prf2 x≥y
+≥→≮ {x} {y} x≥y x<y = case prf₁ prf₂ x≥y
 
   where
-    prf1 : x > y → ⊥
-    prf1 x>y = >-asym x>y (<-to-> x<y)
+    prf₁ : x > y → ⊥
+    prf₁ x>y = >-asym x>y (<-to-> x<y)
 
-    prf2 : x ≡ y → ⊥
-    prf2 x≡y = >→≢ (<-to-> x<y) (≡-sym x≡y)
+    prf₂ : x ≡ y → ⊥
+    prf₂ x≡y = >→≢ (<-to-> x<y) (≡-sym x≡y)
 
 ≢∧≮→> : {x y : ℝ} → (x ≢ y) ∧ (x ≮ y) → x > y
 ≢∧≮→> {x} {y} (x≢y , x≮y) = case prf₁ prf₂ (trichotomy x y)
@@ -456,24 +456,24 @@ mul-x-y {x} {y} =
 <→≯∧≢ x y x<y = (λ x>y → <-asym x<y x>y) , (λ x=y → <→≢ x<y x=y)
 
 <→≱ : {x y : ℝ} → x < y → x ≱ y
-<→≱ {x} {y} x<y x≥y = case prf1 prf2 x≥y
+<→≱ {x} {y} x<y x≥y = case prf₁ prf₂ x≥y
 
   where
-   prf1 : x > y → ⊥
-   prf1 x>y = <-asym x<y (>-to-< x>y)
+   prf₁ : x > y → ⊥
+   prf₁ x>y = <-asym x<y (>-to-< x>y)
 
-   prf2 : x ≡ y → ⊥
-   prf2 x≡y = >→≢ (<-to-> x<y) (≡-sym x≡y)
+   prf₂ : x ≡ y → ⊥
+   prf₂ x≡y = >→≢ (<-to-> x<y) (≡-sym x≡y)
 
 ≤→≯  : {x y : ℝ} → x ≤ y → x ≯ y
-≤→≯ {x} {y} x≤y x>y = case prf1 prf2 x≤y
+≤→≯ {x} {y} x≤y x>y = case prf₁ prf₂ x≤y
 
   where
-    prf1 : x < y → ⊥
-    prf1 x<y = <-asym x<y (>-to-< x>y)
+    prf₁ : x < y → ⊥
+    prf₁ x<y = <-asym x<y (>-to-< x>y)
 
-    prf2 : x ≡ y → ⊥
-    prf2 x≡y = >→≢ x>y x≡y
+    prf₂ : x ≡ y → ⊥
+    prf₂ x≡y = >→≢ x>y x≡y
 
 >-∧-*-cong-l : {x y z : ℝ} → (x > y) ∧ (z > r₀) → z * x > z * y
 >-∧-*-cong-l {x} {y} {z} h = <-to-> (minus-to-< (subst₂ (λ t₁ t₂ → t₁ > t₂) (*-dist-minus z x y) (refl r₀)
@@ -514,19 +514,19 @@ mul-x-y {x} {y} =
 <-<-+ {x} {y} {z} {w} x<y z<w = <-trans (<-+-right x<y) (<-+-left z<w)
 
 x≥-y→-x≤y : (x y : ℝ) → x ≥ - y → - x ≤ y
-x≥-y→-x≤y x y x≥-y = case prf1 prf2 x≥-y
+x≥-y→-x≤y x y x≥-y = case prf₁ prf₂ x≥-y
 
   where
-   prf1 : x > - y → - x < y ∨ - x ≡ y
-   prf1 x>-y = inj₁ (minus-to-< (p₁-helper (<-+-left x>-y)))
+   prf₁ : x > - y → - x < y ∨ - x ≡ y
+   prf₁ x>-y = inj₁ (minus-to-< (p₁-helper (<-+-left x>-y)))
 
     where
      p₁-helper : y + x > y - y → y - - x > r₀
      p₁-helper h = subst₂ (λ t₁ t₂ → t₁ > t₂) (subst (λ w → y + x ≡ y + w)
                                                       (≡-sym mul--x) (refl (y + x))) (+-inve y) h
 
-   prf2 : x ≡ - y → - x < y ∨ - x ≡ y
-   prf2 x=-y = inj₂ p₁-helper
+   prf₂ : x ≡ - y → - x < y ∨ - x ≡ y
+   prf₂ x=-y = inj₂ p₁-helper
 
     where
      p₁-helper : - x ≡ y
@@ -536,24 +536,24 @@ x≥-y→-x≤y x y x≥-y = case prf1 prf2 x≥-y
        y       ∎
 
 ≤-<-trans : {x y z : ℝ} → x ≤ y → y < z → x < z
-≤-<-trans {x} {y} {z} x≤y y<z = case prf1 prf2 x≤y
+≤-<-trans {x} {y} {z} x≤y y<z = case prf₁ prf₂ x≤y
 
   where
-   prf1 : x < y → x < z
-   prf1 x<y = <-trans x<y y<z
+   prf₁ : x < y → x < z
+   prf₁ x<y = <-trans x<y y<z
 
-   prf2 : x ≡ y → x < z
-   prf2 x≡y = ≡-<→< x≡y y<z
+   prf₂ : x ≡ y → x < z
+   prf₂ x≡y = ≡-<→< x≡y y<z
 
 ≥->-trans : {x y z : ℝ} → x ≥ y → y > z → x > z
-≥->-trans {x} {y} {z} x≥y y>z = case prf1 prf2 x≥y
+≥->-trans {x} {y} {z} x≥y y>z = case prf₁ prf₂ x≥y
 
   where
-   prf1 : x > y → x > z
-   prf1 x>y = >-trans x>y y>z
+   prf₁ : x > y → x > z
+   prf₁ x>y = >-trans x>y y>z
 
-   prf2 : x ≡ y → x > z
-   prf2 x≡y = ≡->→> x≡y y>z
+   prf₂ : x ≡ y → x > z
+   prf₂ x≡y = ≡->→> x≡y y>z
 
 ≤-∨ : (x y : ℝ) → x ≤ y ∨ y ≤ x
 ≤-∨ x y = case prf₁ (case prf₂ prf₃) (trichotomy x y)
@@ -579,14 +579,14 @@ x≥-y→-x≤y x y x≥-y = case prf1 prf2 x≥-y
 
  where
   p₁-helper : (x ≡ r₀) ∨ (y ≡ r₀) → ⊥
-  p₁-helper h₁ = case prf1 prf2 h₁
+  p₁-helper h₁ = case prf₁ prf₂ h₁
 
     where
-     prf1 : x ≡ r₀ → ⊥
-     prf1 x≡0 = x≢0 x≡0
+     prf₁ : x ≡ r₀ → ⊥
+     prf₁ x≡0 = x≢0 x≡0
 
-     prf2 : y ≡ r₀ → ⊥
-     prf2 y≡0 = y≢0 y≡0
+     prf₂ : y ≡ r₀ → ⊥
+     prf₂ y≡0 = y≢0 y≡0
 
   p₂-helper : (x ≡ r₀) ∨ (y ≡ r₀)
   p₂-helper = inj₁ p₂₁-helper
@@ -615,17 +615,17 @@ x≥-y→-x≤y x y x≥-y = case prf1 prf2 x≥-y
 <-r₀-produc {x} x<0 = <-∧-* (x<0 , x<0)
 
 *-∨-zero : {x y : ℝ} → (x ≡ r₀) ∨ (y ≡ r₀) → x * y ≡ r₀
-*-∨-zero {x} {y} h = case prf1 prf2 h
+*-∨-zero {x} {y} h = case prf₁ prf₂ h
 
   where
-   prf1 : x ≡ r₀ → x * y ≡ r₀
-   prf1 h =
+   prf₁ : x ≡ r₀ → x * y ≡ r₀
+   prf₁ h =
      x * y  ≡⟨ subst (λ w → x * y ≡ w * y) h (refl (x * y)) ⟩
      r₀ * y ≡⟨ *-left-zero ⟩
      r₀ ∎
 
-   prf2 : y ≡ r₀ → x * y ≡ r₀
-   prf2 h =
+   prf₂ : y ≡ r₀ → x * y ≡ r₀
+   prf₂ h =
      x * y ≡⟨ subst (λ w → x * y ≡ x * w) h (refl (x * y)) ⟩
      x * r₀ ≡⟨ *-right-zero ⟩
      r₀ ∎
@@ -739,11 +739,11 @@ x<x+1 x = >-to-< (x+1>x x)
 
     where
       p₂-helper : {x : ℝ} → x > r₀ → x ⁻¹ ≤ r₀ → ⊥
-      p₂-helper {x} x>r₀ x⁻¹≤r₀ = case prf1 prf2 x⁻¹≤r₀
+      p₂-helper {x} x>r₀ x⁻¹≤r₀ = case prf₁ prf₂ x⁻¹≤r₀
 
        where
-         prf1 : x ⁻¹ < r₀ → ⊥
-         prf1 x⁻¹<r₀ = p₅-helper (p₄-helper (p₃-helper x⁻¹<r₀))
+         prf₁ : x ⁻¹ < r₀ → ⊥
+         prf₁ x⁻¹<r₀ = p₅-helper (p₄-helper (p₃-helper x⁻¹<r₀))
 
           where
             p₃-helper : x ⁻¹ < r₀ → x * x ⁻¹ < x * r₀
@@ -755,8 +755,8 @@ x<x+1 x = >-to-< (x+1>x x)
             p₅-helper : r₁ < r₀ → ⊥
             p₅-helper r₁<r₀ = ≥→≮ 1≥0 r₁<r₀
 
-         prf2 : x ⁻¹ ≡ r₀ → ⊥
-         prf2 x⁻¹≡r₀ = p₈-helper (p₇-helper (p₆-helper x⁻¹≡r₀))
+         prf₂ : x ⁻¹ ≡ r₀ → ⊥
+         prf₂ x⁻¹≡r₀ = p₈-helper (p₇-helper (p₆-helper x⁻¹≡r₀))
 
           where
             p₆-helper : x ⁻¹ ≡ r₀ → x * x ⁻¹ ≡ x * r₀
@@ -859,24 +859,24 @@ TPS1 x =
   sqr x + ℕ2ℝ 2 * x + r₁ ∎
 
 *-inve-product : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x * y) ≢ r₀ → (x * y) ⁻¹ ≡ x ⁻¹ * y ⁻¹
-*-inve-product {x} {y} h1 h2 h3 =
+*-inve-product {x} {y} h₁ h₂ h₃ =
   (x * y) ⁻¹
     ≡⟨ ≡-sym (*-neut ((x * y) ⁻¹)) ⟩
   (x * y) ⁻¹ * r₁
     ≡⟨ *-comm ((x * y) ⁻¹) r₁ ⟩
   r₁ * (x * y) ⁻¹
-    ≡⟨ subst (λ w → r₁ * (x * y) ⁻¹ ≡ w * (x * y) ⁻¹) (≡-sym (p-helper h1 h2) ) (refl (r₁ * (x * y) ⁻¹)) ⟩
+    ≡⟨ subst (λ w → r₁ * (x * y) ⁻¹ ≡ w * (x * y) ⁻¹) (≡-sym (p-helper h₁ h₂) ) (refl (r₁ * (x * y) ⁻¹)) ⟩
   ((x ⁻¹ * y ⁻¹) * (x * y)) * (x * y) ⁻¹
     ≡⟨ *-asso (x ⁻¹ * y ⁻¹) (x * y) ((x * y) ⁻¹) ⟩
   (x ⁻¹ * y ⁻¹) * (x * y * (x * y) ⁻¹)
-    ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * ((x * y) * (x * y) ⁻¹) ≡ (x ⁻¹ * y ⁻¹) * w) (*-inve (x * y) h3) (refl (x ⁻¹ * y ⁻¹ * (x * y * (x * y) ⁻¹))) ⟩
+    ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * ((x * y) * (x * y) ⁻¹) ≡ (x ⁻¹ * y ⁻¹) * w) (*-inve (x * y) h₃) (refl (x ⁻¹ * y ⁻¹ * (x * y * (x * y) ⁻¹))) ⟩
   (x ⁻¹ * y ⁻¹) * r₁
     ≡⟨ *-neut (x ⁻¹ * y ⁻¹) ⟩
   x ⁻¹ * y ⁻¹ ∎
 
   where
     p-helper : {x y : ℝ} → x ≢ r₀ → y ≢ r₀ → (x ⁻¹ * y ⁻¹) * (x * y) ≡ r₁
-    p-helper {x} {y} h1 h2 =
+    p-helper {x} {y} h₁ h₂ =
       (x ⁻¹ * y ⁻¹) * (x * y)
         ≡⟨ subst (λ w → (x ⁻¹ * y ⁻¹) * (x * y) ≡ (x ⁻¹ * y ⁻¹) * w) (*-comm x y) (refl (x ⁻¹ * y ⁻¹ * (x * y))) ⟩
       (x ⁻¹ * y ⁻¹) * (y * x)
@@ -886,13 +886,13 @@ TPS1 x =
       (x ⁻¹ * (y ⁻¹ * y)) * x
         ≡⟨ subst (λ w → (x ⁻¹ * (y ⁻¹ * y)) * x ≡ (x ⁻¹ * w) * x) (*-comm (y ⁻¹) y) (refl (x ⁻¹ * (y ⁻¹ * y) * x)) ⟩
       (x ⁻¹ * (y * y ⁻¹)) * x
-        ≡⟨ subst (λ w → (x ⁻¹ * (y * y ⁻¹)) * x ≡ (x ⁻¹ * w) * x) (*-inve y h2) (refl (x ⁻¹ * (y * y ⁻¹) * x)) ⟩
+        ≡⟨ subst (λ w → (x ⁻¹ * (y * y ⁻¹)) * x ≡ (x ⁻¹ * w) * x) (*-inve y h₂) (refl (x ⁻¹ * (y * y ⁻¹) * x)) ⟩
       (x ⁻¹ * r₁) * x
         ≡⟨ subst (λ w → (x ⁻¹ * r₁) * x ≡ w * x) (*-neut (x ⁻¹)) (refl (x ⁻¹ * r₁ * x)) ⟩
       x ⁻¹ * x
         ≡⟨ *-comm (x ⁻¹) x ⟩
       x * x ⁻¹
-        ≡⟨ *-inve x h1 ⟩
+        ≡⟨ *-inve x h₁ ⟩
       r₁ ∎
 
 -- Adding Heterogeneous Fractions.
