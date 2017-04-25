@@ -1,20 +1,14 @@
-
-module Distance where
+module DistanceProperties where
 
 open import AbsoluteValueDefinition
 open import AbsoluteValueProperties
-open import RealNumbersAxioms
+open import DistanceDefinition
 open import EqReasoning
 open import EqProperties
 open import LogicDefinitions
 open import Nat
 open import Properties
-
--- Distance (or metric) between two points.
--- Mathematical Analysis. Apostol, Tom. M. 1974. p. 60.
-
-dist : ℝ → ℝ → ℝ
-dist x y = abs (x - y)
+open import RealNumbersAxioms
 
 ------------------------------------------------------------------------------
 -- Distance basic properties.

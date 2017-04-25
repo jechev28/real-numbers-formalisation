@@ -2,8 +2,8 @@
 module Limit where
 
 open import AbsoluteValueDefinition
-open import RealNumbersAxioms
-open import Distance
+open import DistanceDefinition
+open import DistanceProperties
 open import EqReasoning
 open import EqProperties
 open import Exp
@@ -11,6 +11,7 @@ open import LogicDefinitions
 open import Min
 open import Nat
 open import Properties
+open import RealNumbersAxioms
 
 -- Auxiliary properties.
 
