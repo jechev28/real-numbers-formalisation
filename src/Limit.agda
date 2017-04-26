@@ -95,48 +95,48 @@ cte-lim a L k f ε ε>0 = exist ε p-helper
     where
     p₂-helper : min δ₁ δ₂ > r₀ → (x : ℝ) → dist x a < min δ₁ δ₂ →
                 dist (f₁ x + f₂ x) (L₁ + L₂) < ε
-    p₂-helper δ>0 x h3 = ≤-<-trans (dis-des (f₁ x) L₁ (f₂ x) L₂) (p₃-helper (<-<-+ (l₁ (case arf1 arf2 (≤-∨ δ₁ δ₂)) x
-                          (case arf3 arf4 (≤-∨ δ₁ δ₂))) (l₂ (case arf5 arf6 (≤-∨ δ₁ δ₂)) x (case arf7 arf8 (≤-∨ δ₁ δ₂))) ))
+    p₂-helper δ>0 x h₃ = ≤-<-trans (dis-des (f₁ x) L₁ (f₂ x) L₂) (p₃-helper (<-<-+ (l₁ (case arf₁ arf₂ (≤-∨ δ₁ δ₂)) x
+                          (case arf₃ arf₄ (≤-∨ δ₁ δ₂))) (l₂ (case arf₅ arf₆ (≤-∨ δ₁ δ₂)) x (case arf₇ arf₈ (≤-∨ δ₁ δ₂))) ))
 
        where
        p₃-helper : dist (f₁ x) L₁ + dist (f₂ x) L₂ < ε * (ℕ2ℝ 2) ⁻¹ + ε * (ℕ2ℝ 2) ⁻¹ → dist (f₁ x) L₁ + dist (f₂ x) L₂ < ε
-       p₃-helper h4 = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ + dist (f₂ x) L₂)) (1/2x+1/2x=x ε) h4
+       p₃-helper h₄ = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ + dist (f₂ x) L₂)) (1/2x+1/2x=x ε) h₄
 
-       arf1 : δ₁ ≤ δ₂ → δ₁ > r₀
-       arf1 h5 = >-≡→>-1 δ>0 (≡-trans (refl (min δ₁ δ₂)) (minxy-l δ₁ δ₂ h5))
+       arf₁ : δ₁ ≤ δ₂ → δ₁ > r₀
+       arf₁ h₅ = >-≡→>-1 δ>0 (≡-trans (refl (min δ₁ δ₂)) (minxy-l δ₁ δ₂ h₅))
 
-       arf2 : δ₂ ≤ δ₁ → δ₁ > r₀
-       arf2 h6 = ≥->-trans (≤-to-≥ h6) (>-≡→>-1 δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h6)))
+       arf₂ : δ₂ ≤ δ₁ → δ₁ > r₀
+       arf₂ h₆ = ≥->-trans (≤-to-≥ h₆) (>-≡→>-1 δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h₆)))
 
-       arf3 : δ₁ ≤ δ₂ → dist x a < δ₁
-       arf3 h7 = <-≡→< h3 (minxy-l δ₁ δ₂ h7)
+       arf₃ : δ₁ ≤ δ₂ → dist x a < δ₁
+       arf₃ h₇ = <-≡→< h₃ (minxy-l δ₁ δ₂ h₇)
 
-       arf4 : δ₂ ≤ δ₁ → dist x a < δ₁
-       arf4 h8 = case arf41 arf42 h8
-
-         where
-         arf41 : δ₂ < δ₁ → dist x a < δ₁
-         arf41 δ₂<δ₁ = <-trans (<-≡→< h3 (minxy-r δ₁ δ₂ (inj₁ (<-to-> δ₂<δ₁)))) δ₂<δ₁
-
-         arf42 : δ₂ ≡ δ₁ → dist x a < δ₁
-         arf42 δ₂≡δ₁ = <-≡→< h3 (minxy-l δ₁ δ₂ (inj₂ (≡-sym δ₂≡δ₁)))
-
-
-       arf5 : δ₁ ≤ δ₂ → δ₂ > r₀
-       arf5 h9 = ≥->-trans (≤-to-≥ h9) (>-≡→>-1 δ>0 (minxy-l δ₁ δ₂ h9))
-
-       arf6 : δ₂ ≤ δ₁ → δ₂ > r₀
-       arf6 h10 = >-≡→>-1 δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h10))
-
-       arf7 : δ₁ ≤ δ₂ → dist x a < δ₂
-       arf7 h11 = case arf71 arf72 h11
+       arf₄ : δ₂ ≤ δ₁ → dist x a < δ₁
+       arf₄ h₈ = case arf₄₁ arf₄₂ h₈
 
          where
-         arf71 : δ₁ < δ₂ → dist x a < δ₂
-         arf71 δ₁<δ₂ = <-trans (<-≡→< h3 (minxy-l δ₁ δ₂ h11)) δ₁<δ₂
+         arf₄₁ : δ₂ < δ₁ → dist x a < δ₁
+         arf₄₁ δ₂<δ₁ = <-trans (<-≡→< h₃ (minxy-r δ₁ δ₂ (inj₁ (<-to-> δ₂<δ₁)))) δ₂<δ₁
 
-         arf72 : δ₁ ≡ δ₂ → dist x a < δ₂
-         arf72 δ₁≡δ₂ = <-≡→< h3 (minxy-r δ₁ δ₂ (inj₂ (δ₁≡δ₂)))
+         arf₄₂ : δ₂ ≡ δ₁ → dist x a < δ₁
+         arf₄₂ δ₂≡δ₁ = <-≡→< h₃ (minxy-l δ₁ δ₂ (inj₂ (≡-sym δ₂≡δ₁)))
 
-       arf8 : δ₂ ≤ δ₁ → dist x a < δ₂
-       arf8 h12 = <-≡→< h3 (minxy-r δ₁ δ₂ (≤-to-≥ h12))
+
+       arf₅ : δ₁ ≤ δ₂ → δ₂ > r₀
+       arf₅ h₉ = ≥->-trans (≤-to-≥ h₉) (>-≡→>-1 δ>0 (minxy-l δ₁ δ₂ h₉))
+
+       arf₆ : δ₂ ≤ δ₁ → δ₂ > r₀
+       arf₆ h₁₀ = >-≡→>-1 δ>0 (minxy-r δ₁ δ₂ (≤-to-≥ h₁₀))
+
+       arf₇ : δ₁ ≤ δ₂ → dist x a < δ₂
+       arf₇ h₁₁ = case arf₇₁ arf₇₂ h₁₁
+
+         where
+         arf₇₁ : δ₁ < δ₂ → dist x a < δ₂
+         arf₇₁ δ₁<δ₂ = <-trans (<-≡→< h₃ (minxy-l δ₁ δ₂ h₁₁)) δ₁<δ₂
+
+         arf₇₂ : δ₁ ≡ δ₂ → dist x a < δ₂
+         arf₇₂ δ₁≡δ₂ = <-≡→< h₃ (minxy-r δ₁ δ₂ (inj₂ (δ₁≡δ₂)))
+
+       arf₈ : δ₂ ≤ δ₁ → dist x a < δ₂
+       arf₈ h₁₂ = <-≡→< h₃ (minxy-r δ₁ δ₂ (≤-to-≥ h₁₂))
