@@ -79,28 +79,28 @@ cte-lim a L k f ε ε>0 = exist ε p-helper
 +-lim : (a L₁ L₂ : ℝ) → (f₁ f₂ : ℝ → ℝ) → lim f₁ a L₁ → lim f₂ a L₂ →
         lim (λ x → f₁ x + f₂ x) a (L₁ + L₂)
 +-lim a L₁ L₂ f₁ f₂ h1 h2 ε ε>0 =
-  a₁-helper (h1 (ε * ℕ2ℝ 2 ⁻¹) (x>0-to-x/2>0 ε ε>0))
+  p₁-helper (h1 (ε * ℕ2ℝ 2 ⁻¹) (x>0-to-x/2>0 ε ε>0))
             (h2 (ε * ℕ2ℝ 2 ⁻¹) (x>0-to-x/2>0 ε ε>0))
 
 -- Choose δ = min {δ₁, δ₂}
 
   where
-  a₁-helper : ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) →
+  p₁-helper : ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) →
               dist x a < δ → dist (f₁ x) L₁ < ε * (ℕ2ℝ 2) ⁻¹) →
               ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ → dist (f₂ x) L₂ < ε * (ℕ2ℝ 2) ⁻¹) →
               ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) →
               dist x a < δ → dist (f₁ x + f₂ x) (L₁ + L₂) < ε)
-  a₁-helper (exist δ₁ l₁) (exist δ₂ l₂) = exist (min δ₁ δ₂) a₂-helper
+  p₁-helper (exist δ₁ l₁) (exist δ₂ l₂) = exist (min δ₁ δ₂) p₂-helper
 
     where
-    a₂-helper : min δ₁ δ₂ > r₀ → (x : ℝ) → dist x a < min δ₁ δ₂ →
+    p₂-helper : min δ₁ δ₂ > r₀ → (x : ℝ) → dist x a < min δ₁ δ₂ →
                 dist (f₁ x + f₂ x) (L₁ + L₂) < ε
-    a₂-helper δ>0 x h3 = ≤-<-trans (dis-des (f₁ x) L₁ (f₂ x) L₂) (a₃-helper (<-<-+ (l₁ (case arf1 arf2 (≤-∨ δ₁ δ₂)) x
+    p₂-helper δ>0 x h3 = ≤-<-trans (dis-des (f₁ x) L₁ (f₂ x) L₂) (p₃-helper (<-<-+ (l₁ (case arf1 arf2 (≤-∨ δ₁ δ₂)) x
                           (case arf3 arf4 (≤-∨ δ₁ δ₂))) (l₂ (case arf5 arf6 (≤-∨ δ₁ δ₂)) x (case arf7 arf8 (≤-∨ δ₁ δ₂))) ))
 
        where
-       a₃-helper : dist (f₁ x) L₁ + dist (f₂ x) L₂ < ε * (ℕ2ℝ 2) ⁻¹ + ε * (ℕ2ℝ 2) ⁻¹ → dist (f₁ x) L₁ + dist (f₂ x) L₂ < ε
-       a₃-helper h4 = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ + dist (f₂ x) L₂)) (1/2x+1/2x=x ε) h4
+       p₃-helper : dist (f₁ x) L₁ + dist (f₂ x) L₂ < ε * (ℕ2ℝ 2) ⁻¹ + ε * (ℕ2ℝ 2) ⁻¹ → dist (f₁ x) L₁ + dist (f₂ x) L₂ < ε
+       p₃-helper h4 = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ + dist (f₂ x) L₂)) (1/2x+1/2x=x ε) h4
 
        arf1 : δ₁ ≤ δ₂ → δ₁ > r₀
        arf1 h5 = >-≡→>-1 δ>0 (≡-trans (refl (min δ₁ δ₂)) (minxy-l δ₁ δ₂ h5))
