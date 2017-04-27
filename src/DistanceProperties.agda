@@ -23,11 +23,7 @@ d-refl x y = d-refl-r , d-refl-l
    ... | inj₂ _ = x-y=0→x=y x y h
 
    d-refl-l : (x ≡ y) → (dist x y ≡ r₀)
-   d-refl-l x=y =
-     dist x y    ≡⟨ subst (λ w → dist x y ≡ abs (x - w))
-                          (≡-sym x=y) (refl
-                          (dist x y))
-                 ⟩
+   d-refl-l (refl _) =
      abs (x - x) ≡⟨ subst (λ w → abs (x - x) ≡ abs w)
                           (+-inve x)
                           (refl (abs (x - x)))
