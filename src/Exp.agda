@@ -6,7 +6,7 @@ open import EqProperties
 open import EqReasoning
 open import LogicDefinitions
 open import Nat
-open import Properties
+open import OrderedFieldProperties
 
 infixr 8 _^_
 

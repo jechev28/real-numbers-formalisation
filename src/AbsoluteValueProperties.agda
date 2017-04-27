@@ -8,7 +8,7 @@ open import RealNumbersAxioms
 open import EqReasoning
 open import EqProperties
 open import LogicDefinitions
-open import Properties
+open import OrderedFieldProperties
 
 abs-0 : abs r₀ ≡ r₀
 abs-0 with x<0∨x≥0 r₀

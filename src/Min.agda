@@ -4,7 +4,7 @@ module Min where
 open import RealNumbersAxioms
 open import EqProperties
 open import LogicDefinitions
-open import Properties
+open import OrderedFieldProperties
 open import ClassicLogic
 
 ≤-∨-not : (x y : ℝ) → (x ≤ y) ∨ (¬ (x ≤ y))

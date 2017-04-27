@@ -3,7 +3,7 @@ module AbsoluteValueDefinition where
 
 open import RealNumbersAxioms
 open import LogicDefinitions
-open import Properties
+open import OrderedFieldProperties
 
 -- Absolute value definition.
 

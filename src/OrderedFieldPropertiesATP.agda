@@ -1,5 +1,5 @@
 
-module PropertiesATP where
+module OrderedFieldPropertiesATP where
 
 open import RealNumbersAxioms
 open import LogicDefinitions

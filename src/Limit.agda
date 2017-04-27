@@ -10,7 +10,7 @@ open import Exp
 open import LogicDefinitions
 open import Min
 open import Nat
-open import Properties
+open import OrderedFieldProperties
 open import RealNumbersAxioms
 
 -- Auxiliary properties.

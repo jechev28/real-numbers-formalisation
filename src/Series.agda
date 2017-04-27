@@ -4,7 +4,7 @@ module Series where
 open import RealNumbersAxioms
 open import EqReasoning
 open import EqProperties
-open import Properties
+open import OrderedFieldProperties
 open import LogicDefinitions
 open import Nat
 open import Exp

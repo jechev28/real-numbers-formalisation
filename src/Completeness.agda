@@ -6,7 +6,7 @@ open import EqReasoning
 open import EqProperties
 open import LogicDefinitions
 open import LogicProperties
-open import Properties
+open import OrderedFieldProperties
 open import Nat
 
 -- Example 1.

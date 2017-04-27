@@ -1,5 +1,5 @@
 
-module Properties where
+module OrderedFieldProperties where
 
 open import RealNumbersAxioms
 open import DemorganLaws

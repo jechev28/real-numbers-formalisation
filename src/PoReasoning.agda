@@ -1,8 +1,8 @@
 
 module PoReasoning where
 
+open import OrderedFieldProperties
 open import RealNumbersAxioms
-open import Properties
 
 infixr 2 _≥⟨_⟩_
 infix  3 _▲
