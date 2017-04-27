@@ -1,8 +1,8 @@
 
 module BoundedEmptySet where
 
-open import RealNumbersAxioms
 open import LogicDefinitions
+open import RealNumbersAxioms
 
 -- Bounded empty set (Bes)
 

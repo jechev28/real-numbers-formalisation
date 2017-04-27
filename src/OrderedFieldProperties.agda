@@ -1,13 +1,13 @@
 
 module OrderedFieldProperties where
 
-open import RealNumbersAxioms
 open import DemorganLaws
 open import EqProperties
 open import EqReasoning
 open import LogicDefinitions
 open import LogicProperties
 open import Nat
+open import RealNumbersAxioms
 
 ------------------------------------------------------------------------------
 -- Some field properties

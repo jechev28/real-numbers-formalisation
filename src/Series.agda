@@ -1,13 +1,13 @@
 
 module Series where
 
-open import RealNumbersAxioms
-open import EqReasoning
 open import EqProperties
-open import OrderedFieldProperties
+open import EqReasoning
+open import Exp
 open import LogicDefinitions
 open import Nat
-open import Exp
+open import OrderedFieldProperties
+open import RealNumbersAxioms
 
 -- Aₙ = 1 + 3 + 5 + ... + 2n - 1.
 

@@ -1,9 +1,9 @@
 
 module AbsoluteValueDefinition where
 
-open import RealNumbersAxioms
 open import LogicDefinitions
 open import OrderedFieldProperties
+open import RealNumbersAxioms
 
 -- Absolute value definition.
 

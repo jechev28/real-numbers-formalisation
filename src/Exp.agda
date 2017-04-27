@@ -1,12 +1,12 @@
 
 module Exp where
 
-open import RealNumbersAxioms
 open import EqProperties
 open import EqReasoning
 open import LogicDefinitions
 open import Nat
 open import OrderedFieldProperties
+open import RealNumbersAxioms
 
 infixr 8 _^_
 

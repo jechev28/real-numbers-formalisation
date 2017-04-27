@@ -3,8 +3,8 @@ module DistanceProperties where
 open import AbsoluteValueDefinition
 open import AbsoluteValueProperties
 open import DistanceDefinition
-open import EqReasoning
 open import EqProperties
+open import EqReasoning
 open import LogicDefinitions
 open import Nat
 open import OrderedFieldProperties

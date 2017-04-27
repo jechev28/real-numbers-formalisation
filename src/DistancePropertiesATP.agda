@@ -2,8 +2,8 @@
 
 module DistancePropertiesATP where
 
-open import DistanceDefinition
 open import AbsoluteValueProperties
+open import DistanceDefinition
 open import LogicDefinitions
 open import OrderedFieldProperties
 open import RealNumbersAxioms

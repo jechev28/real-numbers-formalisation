@@ -4,11 +4,11 @@
 module AbsoluteValueProperties where
 
 open import AbsoluteValueDefinition
-open import RealNumbersAxioms
 open import EqReasoning
 open import EqProperties
 open import LogicDefinitions
 open import OrderedFieldProperties
+open import RealNumbersAxioms
 
 abs-0 : abs r₀ ≡ r₀
 abs-0 with x<0∨x≥0 r₀

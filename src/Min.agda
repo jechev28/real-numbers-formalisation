@@ -1,11 +1,11 @@
 
 module Min where
 
-open import RealNumbersAxioms
+open import ClassicLogic
 open import EqProperties
 open import LogicDefinitions
 open import OrderedFieldProperties
-open import ClassicLogic
+open import RealNumbersAxioms
 
 ≤-∨-not : (x y : ℝ) → (x ≤ y) ∨ (¬ (x ≤ y))
 ≤-∨-not x y = pem

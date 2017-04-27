@@ -4,8 +4,8 @@ module Limit where
 open import AbsoluteValueDefinition
 open import DistanceDefinition
 open import DistanceProperties
-open import EqReasoning
 open import EqProperties
+open import EqReasoning
 open import Exp
 open import LogicDefinitions
 open import Min
