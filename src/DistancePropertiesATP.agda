@@ -5,7 +5,6 @@ module DistancePropertiesATP where
 open import AbsoluteValueProperties
 open import DistanceDefinition
 open import LogicDefinitions
-open import OrderedFieldProperties
 open import RealNumbersAxioms
 
 postulate d-refl : (x y : ℝ) → (dist x y ≡ r₀) ↔ (x ≡ y)
