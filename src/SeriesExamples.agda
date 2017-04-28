@@ -1,5 +1,5 @@
 
-module Series where
+module SeriesExamples where
 
 open import EqProperties
 open import EqReasoning
