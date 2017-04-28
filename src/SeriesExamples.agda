@@ -36,7 +36,7 @@ S₁ (succ n) = p-helper
                                               (S₁ n)
                                               (refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁))
                                      ⟩
-    sqr (ℕ2ℝ n) + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡⟨ ≡-sym (TPS1 (ℕ2ℝ n)) ⟩
+    sqr (ℕ2ℝ n) + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡⟨ ≡-sym (PST1 (ℕ2ℝ n)) ⟩
     sqr (ℕ2ℝ n + r₁)                 ≡⟨ subst (λ w → sqr (ℕ2ℝ n + r₁) ≡ sqr w)
                                               (+-comm (ℕ2ℝ n) r₁)
                                               (refl (sqr (ℕ2ℝ n + r₁)))

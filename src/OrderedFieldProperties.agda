@@ -302,10 +302,10 @@ x-y=0→x=y x y h =
    ≡⟨ ≡-sym (+-asso (a * c) (a * d) (b * c + b * d)) ⟩
   (a * c + a * d) + (b * c + b * d) ∎
 
--- Trinomial Perfect Square.
+-- Perfect square trinomial.
 
-TPS : (x y : ℝ) → sqr (x + y) ≡ sqr x + ℕ2ℝ 2 * (x * y) + sqr y
-TPS x y =
+PST : (x y : ℝ) → sqr (x + y) ≡ sqr x + ℕ2ℝ 2 * (x * y) + sqr y
+PST x y =
   sqr (x + y)
     ≡⟨ *-double-dist x y x y ⟩
   sqr x + x * y + (y * x + sqr y)
@@ -323,10 +323,10 @@ TPS x y =
     ≡⟨ ≡-sym (+-asso (sqr x) (ℕ2ℝ 2 * (x * y)) (sqr y)) ⟩
   sqr x + ℕ2ℝ 2 * (x * y) + sqr y   ∎
 
-TPS1 : (x : ℝ) → sqr (x + r₁) ≡ sqr x + ℕ2ℝ 2 * x + r₁
-TPS1 x =
+PST1 : (x : ℝ) → sqr (x + r₁) ≡ sqr x + ℕ2ℝ 2 * x + r₁
+PST1 x =
   sqr (x + r₁)
-   ≡⟨ TPS x r₁ ⟩
+   ≡⟨ PST x r₁ ⟩
   sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁
    ≡⟨ subst (λ w → sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁ ≡ sqr x + ℕ2ℝ 2 * w + sqr r₁) (*-neut x)
    (refl (sqr x + ℕ2ℝ 2 * (x * r₁) + sqr r₁)) ⟩
