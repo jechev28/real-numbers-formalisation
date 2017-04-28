@@ -17,8 +17,8 @@ A (succ n) = A n + (ℕ2ℝ 2) * (ℕ2ℝ n) + r₁
 
 -- Demonstration of the convergence of Aₙ = n².
 
-S₁ : (n : ℕ) → A n ≡ sqr (ℕ2ℝ n)
-S₁ zero = p-helper
+A-con : (n : ℕ) → A n ≡ sqr (ℕ2ℝ n)
+A-con zero = p-helper
   where
   p-helper : A zero ≡ sqr (ℕ2ℝ zero)
   p-helper =
@@ -26,14 +26,14 @@ S₁ zero = p-helper
     r₀             ≡⟨ ≡-sym r₀-sqr ⟩
     sqr (ℕ2ℝ zero) ∎
 
-S₁ (succ n) = p-helper
+A-con (succ n) = p-helper
   where
   p-helper : A (succ n) ≡ sqr (ℕ2ℝ (succ n))
   p-helper =
     A (succ n)                       ≡⟨ refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁) ⟩
     A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁         ≡⟨ subst (λ w → A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡
                                                      w + ℕ2ℝ 2 * ℕ2ℝ n + r₁)
-                                              (S₁ n)
+                                              (A-con n)
                                               (refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁))
                                      ⟩
     sqr (ℕ2ℝ n) + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡⟨ ≡-sym (PST1 (ℕ2ℝ n)) ⟩
@@ -52,8 +52,8 @@ B r (succ n) = B r n + r ^ (succ n)
 --  Demonstration of the convergence of geometric progression:
 -- 1 + r + r² + r³ + ... + rⁿ = (1 - rⁿ⁺¹)(1 - r)⁻¹. r∈ℝ, n∈ℕ.
 
-S₂ : (r : ℝ) → (n : ℕ) → ¬ ( r ≡ r₁) → B r n ≡ (ℕ2ℝ 1 - r ^ (succ n)) * (ℕ2ℝ 1 - r) ⁻¹
-S₂ r zero r≠r₁ = ≡-sym p-helper
+B-con : (r : ℝ) → (n : ℕ) → ¬ ( r ≡ r₁) → B r n ≡ (ℕ2ℝ 1 - r ^ (succ n)) * (ℕ2ℝ 1 - r) ⁻¹
+B-con r zero r≠r₁ = ≡-sym p-helper
 
   where
    p-helper : (r₁ + r₀ - r * r₁) * (r₁ + r₀ - r) ⁻¹ ≡ r₁
@@ -90,13 +90,13 @@ S₂ r zero r≠r₁ = ≡-sym p-helper
          r₁ + r₀        ≡⟨ +-neut r₁ ⟩
          r₁             ∎
 
-S₂ r (succ n) r≠r₁ = p-helper
+B-con r (succ n) r≠r₁ = p-helper
 
   where
    p-helper : B r (succ n) ≡ (ℕ2ℝ 1 - r ^ succ (succ n)) * (ℕ2ℝ 1 - r) ⁻¹
    p-helper =
      B r n + r ^ succ n
-       ≡⟨ subst (λ w → B r n + r ^ succ n ≡ w + r ^ succ n) (S₂ r n r≠r₁) (refl (B r n + r ^ succ n)) ⟩
+       ≡⟨ subst (λ w → B r n + r ^ succ n ≡ w + r ^ succ n) (B-con r n r≠r₁) (refl (B r n + r ^ succ n)) ⟩
      (ℕ2ℝ 1 - r ^ succ n) * (ℕ2ℝ 1 - r) ⁻¹ + r ^ succ n
        ≡⟨ subst (λ w → (ℕ2ℝ 1 - r ^ succ n) * (ℕ2ℝ 1 - r) ⁻¹ + r ^ succ n ≡ (ℕ2ℝ 1 - r ^ succ n) * (ℕ2ℝ 1 - r) ⁻¹ + w)
        (≡-sym (*-neut (r ^ succ n))) (refl ((r₁ + r₀ - r * r ^ n) * (r₁ + r₀ - r) ⁻¹ + r * r ^ n)) ⟩
