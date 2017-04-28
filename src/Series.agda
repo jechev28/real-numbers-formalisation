@@ -12,33 +12,36 @@ open import RealNumbersAxioms
 -- Aₙ = 1 + 3 + 5 + ... + 2n - 1.
 
 A : ℕ → ℝ
-A zero        = r₀
-A (succ n)    = A n + (ℕ2ℝ 2) * (ℕ2ℝ n) + r₁
+A zero     = r₀
+A (succ n) = A n + (ℕ2ℝ 2) * (ℕ2ℝ n) + r₁
 
 -- Demonstration of the convergence of Aₙ = n².
 
 S₁ : (n : ℕ) → A n ≡ sqr (ℕ2ℝ n)
 S₁ zero = p-helper
-
   where
-    p-helper : A zero ≡ sqr (ℕ2ℝ zero)
-    p-helper =
-      A zero      ≡⟨ refl r₀ ⟩
-      r₀          ≡⟨ ≡-sym r₀-sqr ⟩
-      sqr (ℕ2ℝ zero)  ∎
+  p-helper : A zero ≡ sqr (ℕ2ℝ zero)
+  p-helper =
+    A zero         ≡⟨ refl r₀ ⟩
+    r₀             ≡⟨ ≡-sym r₀-sqr ⟩
+    sqr (ℕ2ℝ zero) ∎
 
 S₁ (succ n) = p-helper
-
   where
-    p-helper : A (succ n) ≡ sqr (ℕ2ℝ (succ n))
-    p-helper =
-      A (succ n)
-        ≡⟨ refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁) ⟩
-      A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁  ≡⟨ subst (λ w → A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡ w + ℕ2ℝ 2 * ℕ2ℝ n + r₁) (S₁ n)
-        (refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁)) ⟩
-      sqr (ℕ2ℝ n) + ℕ2ℝ 2 * ℕ2ℝ n + r₁  ≡⟨ ≡-sym (TPS1 (ℕ2ℝ n)) ⟩
-      sqr (ℕ2ℝ n + r₁)  ≡⟨ subst (λ w → sqr (ℕ2ℝ n + r₁) ≡ sqr w) (+-comm (ℕ2ℝ n) r₁) (refl (sqr (ℕ2ℝ n + r₁))) ⟩
-      sqr (r₁ + ℕ2ℝ n)  ∎
+  p-helper : A (succ n) ≡ sqr (ℕ2ℝ (succ n))
+  p-helper =
+    A (succ n)                       ≡⟨ refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁) ⟩
+    A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁         ≡⟨ subst (λ w → A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡
+                                                     w + ℕ2ℝ 2 * ℕ2ℝ n + r₁)
+                                              (S₁ n)
+                                              (refl (A n + ℕ2ℝ 2 * ℕ2ℝ n + r₁))
+                                     ⟩
+    sqr (ℕ2ℝ n) + ℕ2ℝ 2 * ℕ2ℝ n + r₁ ≡⟨ ≡-sym (TPS1 (ℕ2ℝ n)) ⟩
+    sqr (ℕ2ℝ n + r₁)                 ≡⟨ subst (λ w → sqr (ℕ2ℝ n + r₁) ≡ sqr w)
+                                              (+-comm (ℕ2ℝ n) r₁)
+                                              (refl (sqr (ℕ2ℝ n + r₁)))
+                                     ⟩
+    sqr (r₁ + ℕ2ℝ n)                 ∎
 
 -- Bₙ(r) = 1 + r + r² + r³ + ... + rⁿ. r∈ℝ, n∈ℕ.
 
@@ -46,7 +49,8 @@ B : ℝ → ℕ → ℝ
 B r zero     = r₁
 B r (succ n) = B r n + r ^ (succ n)
 
---  Demonstration of the convergence of Geometric Progression: 1 + r + r² + r³ + ... + rⁿ = (1 - rⁿ⁺¹)(1 - r)⁻¹. r∈ℝ, n∈ℕ.
+--  Demonstration of the convergence of geometric progression:
+-- 1 + r + r² + r³ + ... + rⁿ = (1 - rⁿ⁺¹)(1 - r)⁻¹. r∈ℝ, n∈ℕ.
 
 S₂ : (r : ℝ) → (n : ℕ) → ¬ ( r ≡ r₁) → B r n ≡ (ℕ2ℝ 1 - r ^ (succ n)) * (ℕ2ℝ 1 - r) ⁻¹
 S₂ r zero r≠r₁ = ≡-sym p-helper
