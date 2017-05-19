@@ -1,5 +1,5 @@
 
-module SeriesExamples where
+module SummationsExamples where
 
 open import EqProperties
 open import EqReasoning
@@ -15,7 +15,7 @@ A : ℕ → ℝ
 A zero     = r₀
 A (succ n) = A n + (ℕ2ℝ 2) * (ℕ2ℝ n) + r₁
 
--- Demonstration of the convergence of Aₙ = n².
+-- Demonstration that Aₙ = n².
 
 A-con : (n : ℕ) → A n ≡ sqr (ℕ2ℝ n)
 A-con zero = p-helper
@@ -49,7 +49,7 @@ B : ℝ → ℕ → ℝ
 B r zero     = r₁
 B r (succ n) = B r n + r ^ (succ n)
 
---  Demonstration of the convergence of geometric progression:
+--  Demonstration of the value of geometric progression:
 -- 1 + r + r² + r³ + ... + rⁿ = (1 - rⁿ⁺¹)(1 - r)⁻¹. r∈ℝ, n∈ℕ.
 
 B-con : (r : ℝ) → (n : ℕ) → ¬ ( r ≡ r₁) → B r n ≡ (ℕ2ℝ 1 - r ^ (succ n)) * (ℕ2ℝ 1 - r) ⁻¹

@@ -4,8 +4,8 @@ module README where
 -- addition and multiplication under this type.
 open import Nat
 
--- It shows the convergence of some series in the real numbers.
-open import SeriesExamples
+-- It shows the value of the some summations in the real numbers.
+open import SummationsExamples
 
 -- The empty set is defined and the proof is shown that it is bounded.
 open import BoundedEmptySet
