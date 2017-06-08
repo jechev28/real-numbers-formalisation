@@ -28,27 +28,27 @@ postulate
 -- The limit of a product is the product of the limits.
 
 *-lim : (a L₁ L₂ : ℝ) → (f₁ f₂ : ℝ → ℝ) → lim f₁ a L₁ → lim f₂ a L₂ → lim (λ x → f₁ x * f₂ x) a (L₁ * L₂)
-*-lim a L₁ L₂ f₁ f₂ h1 h2 ε ε>0 = a₁-helaer (h1 (sqrt ε) (sqrt-pos ε ε>0)) (h2 (sqrt ε) (sqrt-pos ε ε>0))
+*-lim a L₁ L₂ f₁ f₂ h1 h2 ε ε>0 = a₁-helper (h1 (sqrt ε) (sqrt-pos ε ε>0)) (h2 (sqrt ε) (sqrt-pos ε ε>0))
 
 -- Choose δ = min {δ₁, δ₂}
 
   where
-   a₁-helaer : ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ → dist (f₁ x) L₁ < sqrt ε) →
+   a₁-helper : ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ → dist (f₁ x) L₁ < sqrt ε) →
     ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ → dist (f₂ x) L₂ < sqrt ε) → ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) →
     dist x a < δ → dist (f₁ x * f₂ x) (L₁ * L₂) < ε)
-   a₁-helaer (exist δ₁ l₁) (exist δ₂ l₂) = exist (min δ₁ δ₂) a₂-helaer
+   a₁-helper (exist δ₁ l₁) (exist δ₂ l₂) = exist (min δ₁ δ₂) a₂-helper
 
     where
-     a₂-helaer : min δ₁ δ₂ > r₀ → (x : ℝ) → dist x a < min δ₁ δ₂ → dist (f₁ x * f₂ x) (L₁ * L₂) < ε
-     a₂-helaer δ>0 x h3 = ≤-<-trans (inj₂ (dis-produc (f₁ x) L₁ (f₂ x) L₂))
-                          (a₃-helaer (trans-<-* (d-pos (f₁ x) L₁) (sqrt-pos ε ε>0)
+     a₂-helper : min δ₁ δ₂ > r₀ → (x : ℝ) → dist x a < min δ₁ δ₂ → dist (f₁ x * f₂ x) (L₁ * L₂) < ε
+     a₂-helper δ>0 x h3 = ≤-<-trans (inj₂ (dis-produc (f₁ x) L₁ (f₂ x) L₂))
+                          (a₃-helper (trans-<-* (d-pos (f₁ x) L₁) (sqrt-pos ε ε>0)
                           (d-pos (f₂ x) L₂) (sqrt-pos ε ε>0) (l₁ (case arf1 arf2 (≤-∨ δ₁ δ₂)) x
                           (case arf3 arf4 (≤-∨ δ₁ δ₂))) (l₂ (case arf5 arf6 (≤-∨ δ₁ δ₂)) x
                           (case arf7 arf8 (≤-∨ δ₁ δ₂)))))
 
       where
-       a₃-helaer : dist (f₁ x) L₁ * dist (f₂ x) L₂ < sqrt ε * sqrt ε → dist (f₁ x) L₁ * dist (f₂ x) L₂ < ε
-       a₃-helaer h4 = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ * dist (f₂ x) L₂)) (sqrt-inve ε (inj₁ ε>0)) h4
+       a₃-helper : dist (f₁ x) L₁ * dist (f₂ x) L₂ < sqrt ε * sqrt ε → dist (f₁ x) L₁ * dist (f₂ x) L₂ < ε
+       a₃-helper h4 = subst₂ (λ t₁ t₂ → t₁ < t₂) (refl (dist (f₁ x) L₁ * dist (f₂ x) L₂)) (sqrt-inve ε (inj₁ ε>0)) h4
 
 
        arf1 : δ₁ ≤ δ₂ → δ₁ > r₀
@@ -93,22 +93,22 @@ postulate
 
 ^-lim : (a L : ℝ) → (n : ℕ) → (f : ℝ → ℝ) → lim f a L →
                                   lim (λ x → (f x) ^ (succ n)) a (L ^ (succ n))
-^-lim a L zero f h1 ε ε>0 = a₁-helaer (h1 ε ε>0)
+^-lim a L zero f h1 ε ε>0 = a₁-helper (h1 ε ε>0)
 
   where
-   a₁-helaer : ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ → dist (f x) L < ε) →
+   a₁-helper : ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ → dist (f x) L < ε) →
                ∃ᵣ (λ δ → δ > r₀ → (x : ℝ) → dist x a < δ →
                                     dist (f x ^ succ zero) (L ^ succ zero) < ε)
-   a₁-helaer (exist δ l) = exist δ a₁₂-helaer
+   a₁-helper (exist δ l) = exist δ a₁₂-helper
 
     where
-     a₁₂-helaer : δ > r₀ → (x : ℝ) → dist x a < δ →
+     a₁₂-helper : δ > r₀ → (x : ℝ) → dist x a < δ →
                                        dist (f x ^ succ zero) (L ^ succ zero) < ε
-     a₁₂-helaer δ>0 x h2 = subst₂ (λ t₁ t₂ → t₁ < t₂) a₁₃-helaer (refl ε) (l δ>0 x h2)
+     a₁₂-helper δ>0 x h2 = subst₂ (λ t₁ t₂ → t₁ < t₂) a₁₃-helper (refl ε) (l δ>0 x h2)
 
       where
-       a₁₃-helaer : dist (f x) L ≡ dist (f x * r₁) (L * r₁)
-       a₁₃-helaer =
+       a₁₃-helper : dist (f x) L ≡ dist (f x * r₁) (L * r₁)
+       a₁₃-helper =
          dist (f x) L             ≡⟨ subst (λ w → dist (f x) L ≡ dist w L)
                                    (≡-sym (x^1≡x (f x))) (refl (dist (f x) L)) ⟩
          dist (f x * r₁) L        ≡⟨ subst (λ w → dist (f x * r₁) L ≡ dist (f x * r₁) w)
